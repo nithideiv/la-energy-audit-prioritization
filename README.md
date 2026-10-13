@@ -1,6 +1,6 @@
 # LA Building Energy Audit Prioritization
 
-Starter project for CSCI 461. It downloads 2023–2025 Los Angeles EBEWE records and NOAA GHCN-Daily observations, cleans and joins them, compares building-only and building-plus-weather regression models using building-grouped validation, and produces a cautious audit-priority ranking.
+Project for CSCI 461. It downloads 2023–2025 Los Angeles EBEWE records and NOAA GHCN-Daily observations, cleans and joins them, compares building-only and building-plus-weather regression models using building-grouped validation, and produces a cautious audit-priority ranking.
 
 ## Research question
 
