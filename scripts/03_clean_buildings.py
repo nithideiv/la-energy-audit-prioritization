@@ -11,6 +11,7 @@ ALIASES = {
     "address": ["building_address", "property_address", "address"],
     "year": ["program_year", "compliance_year", "reporting_year", "year"],
     "property_type": ["primary_property_type", "property_type"],
+    "postal_code": ["postal_code", "zip_code", "zip"],
     "year_built": ["year_built"],
     "floor_area": ["gross_building_floor_area_ft", "property_gfa_calculated_buildings_and_parking_ft", "property_gfa_self_reported_ft", "gross_floor_area", "floor_area"],
     "site_eui": ["site_energy_use_intensity_eui_kbtu_ft", "site_eui_kbtu_ft", "site_eui", "site_energy_use_intensity_eui"],
@@ -24,7 +25,7 @@ def clean(raw: pd.DataFrame, years: list[int]):
     raw = normalize_columns(raw)
     mapped = {}
     for target, aliases in ALIASES.items():
-        source = find_column(raw.columns, aliases, required=target not in {"emissions", "latitude", "longitude"})
+        source = find_column(raw.columns, aliases, required=target not in {"emissions", "latitude", "longitude", "postal_code"})
         mapped[target] = raw[source] if source else pd.NA
     df = pd.DataFrame(mapped)
     for c in ["year", "year_built", "floor_area", "site_eui", "emissions", "latitude", "longitude"]:
@@ -32,6 +33,7 @@ def clean(raw: pd.DataFrame, years: list[int]):
     df["building_id"] = df["building_id"].astype("string").str.strip()
     df["address"] = df["address"].astype("string").str.strip().str.upper()
     df["property_type"] = df["property_type"].astype("string").str.strip().replace("", pd.NA)
+    df["postal_code"] = df["postal_code"].astype("string").str.extract(r"(\d{5})", expand=False)
     df = df[df["year"].isin(years)].copy()
     selected_year_rows = len(df)
     duplicate_rows = int(df.duplicated(["building_id", "year"], keep=False).sum())
