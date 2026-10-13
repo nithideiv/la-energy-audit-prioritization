@@ -1,0 +1,7 @@
+model_a,model_b,top_decile_jaccard
+linear_building,linear_weather,0.9780701754385965
+linear_building,rf_building,0.657439446366782
+linear_building,rf_weather,0.6701754385964912
+linear_weather,rf_building,0.6426116838487973
+linear_weather,rf_weather,0.6550522648083623
+rf_building,rf_weather,0.9571984435797666

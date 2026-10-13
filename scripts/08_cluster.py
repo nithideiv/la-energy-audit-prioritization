@@ -6,12 +6,21 @@ from sklearn.impute import SimpleImputer
 from sklearn.metrics import silhouette_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+from project import load_config
 
 
 def main():
+    cfg = load_config()
     df = pd.read_csv(ROOT / "data/processed/model_table.csv", dtype={"building_id": str})
+    df = df[
+        df["station_id"].notna()
+        & df["mean_temp_f"].notna()
+        & df["site_eui"].le(cfg["site_eui_model_max"])
+    ].reset_index(drop=True)
     num = ["floor_area", "building_age", "site_eui", "emissions", "hdd65", "cdd65", "hot_days_90f"]
     cat = ["property_type"]
     prep = ColumnTransformer([
@@ -22,7 +31,9 @@ def main():
     scores, fitted = [], {}
     for k in range(2, 9):
         model = KMeans(n_clusters=k, random_state=461, n_init=20).fit(x)
-        scores.append({"k": k, "inertia": model.inertia_, "silhouette": silhouette_score(x, model.labels_, sample_size=min(5000, len(df)), random_state=461)})
+        labels = model.labels_
+        score = silhouette_score(x, labels, sample_size=min(5000, len(df)), random_state=461) if len(set(labels)) > 1 else float("nan")
+        scores.append({"k": k, "inertia": model.inertia_, "silhouette": score})
         fitted[k] = model
     score_df = pd.DataFrame(scores)
     score_df.to_csv(ROOT / "outputs/cluster_selection.csv", index=False)

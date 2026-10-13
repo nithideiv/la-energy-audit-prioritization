@@ -45,7 +45,16 @@ def metrics(y, p):
 def main():
     cfg = load_config()
     df = pd.read_csv(ROOT / "data/processed/model_table.csv", dtype={"building_id": str})
-    df = df[df["site_eui"].notna() & df["floor_area"].gt(0)].reset_index(drop=True)
+    extreme = df[df["site_eui"] > cfg["site_eui_model_max"]].copy()
+    extreme.to_csv(ROOT / "outputs/extreme_site_eui_review.csv", index=False)
+    df = df[
+        df["site_eui"].notna()
+        & df["floor_area"].gt(0)
+        & df["station_id"].notna()
+        & df["mean_temp_f"].notna()
+        & df["site_eui"].le(cfg["site_eui_model_max"])
+    ].reset_index(drop=True)
+    print(f"Modeling {len(df):,} rows; set aside {len(extreme):,} rows above the Site EUI review threshold")
     specs = {
         "linear_building": (BASE_NUM, lambda: LinearRegression()),
         "linear_weather": (BASE_NUM + WEATHER, lambda: LinearRegression()),

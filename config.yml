@@ -15,6 +15,7 @@ stations:
     longitude: -118.3587
 base_temperature_f: 65
 hot_day_threshold_f: 90
+site_eui_model_max: 2000
 random_state: 461
 n_splits: 5
 

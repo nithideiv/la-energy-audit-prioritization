@@ -21,9 +21,11 @@ def main():
     stations = cfg["stations"]
     distances = {sid: haversine_miles(b["latitude"], b["longitude"], s["latitude"], s["longitude"]) for sid, s in stations.items()}
     dist = pd.DataFrame(distances, index=b.index)
-    b["station_id"] = dist.idxmin(axis=1)
-    b["station_distance_miles"] = dist.min(axis=1)
-    b.loc[b["latitude"].isna() | b["longitude"].isna(), ["station_id", "station_distance_miles"]] = np.nan
+    located = b["latitude"].notna() & b["longitude"].notna()
+    b["station_id"] = pd.NA
+    b["station_distance_miles"] = np.nan
+    b.loc[located, "station_id"] = dist.loc[located].idxmin(axis=1)
+    b.loc[located, "station_distance_miles"] = dist.loc[located].min(axis=1)
     w = pd.read_csv(ROOT / "data/processed/weather_annual.csv")
     model = b.merge(w, left_on=["station_id", "year"], right_on=["STATION", "year"], how="left")
     model["building_age"] = model["year"] - model["year_built"]
