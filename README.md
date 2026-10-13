@@ -25,7 +25,10 @@ python scripts/01_download_buildings.py
 python scripts/02_download_weather.py
 python scripts/03_clean_buildings.py
 python scripts/04_geocode_buildings.py --prepare
-# Upload data/interim/census_batch_input.csv at the Census batch geocoder.
+# Upload data/interim/census_batch_input.csv at the Census batch geocoder. Here's the set up:
+#Address file: census_batch_input.csv
+#Benchmark: Public_AR_Current
+#Vintage: Current_Current
 # Save its result as data/raw/census_batch_result.csv, then run:
 python scripts/04_geocode_buildings.py --parse data/raw/census_batch_result.csv
 python scripts/05_build_model_table.py
