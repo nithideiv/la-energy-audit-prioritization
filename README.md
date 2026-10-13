@@ -69,10 +69,10 @@ The Census batch geocoder is deliberately a manual checkpoint so no addresses ar
 
 | Owner | Primary work | Handoff |
 |---|---|---|
-| Person 1 | EBEWE download, schema log, building cleaning | `buildings_clean.csv` + quality report |
-| Person 2 | NOAA download, quality flags, annual aggregation | `weather_annual.csv` |
-| Person 3 | Address review, Census batch, nearest station join | geocodes + match report |
-| Person 4 | EDA, grouped models, rankings, stability checks | figures + metrics + ranking |
+| Reda | EBEWE download, schema log, building cleaning | `buildings_clean.csv` + quality report |
+| Daryl | NOAA download, quality flags, annual aggregation | `weather_annual.csv` |
+| Srujan | Address review, Census batch, nearest station join | geocodes + match report |
+| Nithi | EDA, grouped models, rankings, stability checks | figures + metrics + ranking |
 
 Everyone should review the final exclusion rules and interpretation before submission.
 
