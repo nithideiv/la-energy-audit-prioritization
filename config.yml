@@ -1,0 +1,20 @@
+years: [2023, 2024, 2025]
+ebewe_dataset_id: 9yda-i4ya
+stations:
+  USW00093134:
+    name: Downtown_USC
+    latitude: 34.0236
+    longitude: -118.2911
+  USW00023174:
+    name: LAX
+    latitude: 33.9380
+    longitude: -118.3888
+  USW00023152:
+    name: Burbank_Airport
+    latitude: 34.2007
+    longitude: -118.3587
+base_temperature_f: 65
+hot_day_threshold_f: 90
+random_state: 461
+n_splits: 5
+

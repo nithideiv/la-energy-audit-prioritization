@@ -1,0 +1,47 @@
+# Final report outline
+
+## 1. Introduction
+
+- Why audit prioritization matters under limited budgets
+- Research question and subgoals
+- Interpretation boundary: screening, not causal retrofit estimates
+
+## 2. Data
+
+- EBEWE source, years, original/retained sample sizes
+- NOAA stations, variables, units, flags, and coverage
+- Census geocoding match rate and nearest-station distances
+- Exact definition of reporting/compliance year
+
+## 3. Methods
+
+- Cleaning and duplicate-resolution rules
+- Predictors and leakage exclusions
+- Grouped train/test logic and preprocessing within folds
+- Baselines, linear regression, random forest, and metrics
+- Out-of-fold residual and excess-use formulas
+- Three-year eligibility rule and ranking stability
+- Exploratory k-means: interpretation only, not ranking
+
+## 4. Results
+
+- EDA and missingness
+- Building-only versus weather-added metrics
+- Residual checks by property type/year
+- Ranked candidates and repeated positive residuals
+- Top-10% Jaccard overlap across years/models
+
+## 5. Limitations and ethics
+
+- Unobserved occupancy, schedules, vacancies, renovations, and special uses
+- Reporting and geocoding error
+- Three weather stations simplify microclimates
+- Model residuals are not causal savings estimates
+- Audit ranking should be reviewed by humans before outreach or spending
+
+## 6. Conclusion
+
+- What weather did or did not add
+- What patterns were stable
+- Recommended next validation step: utility/occupancy review or on-site audit
+
