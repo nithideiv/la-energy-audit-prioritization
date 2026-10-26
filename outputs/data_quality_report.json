@@ -1,5 +1,10 @@
 {
   "year_source_column": "program_year",
+  "usable_rows_by_year": {
+    "2023": 7566,
+    "2024": 7354,
+    "2025": 6603
+  },
   "raw_rows": 96156,
   "selected_year_rows_before_dedup": 33715,
   "duplicate_rows_flagged": 0,

@@ -98,6 +98,9 @@ def main():
     ).reset_index()
     eligible = per[(per["years"] == len(cfg["years"])) & (per["positive_years"] >= 2)].copy()
     eligible = eligible.sort_values("mean_annual_excess_kbtu", ascending=False)
+    # Does not change the ranking order; flags extreme actual-vs-predicted gaps for data review.
+    eligible["actual_to_predicted_ratio"] = eligible["mean_actual_site_eui"] / eligible["mean_predicted_site_eui"]
+    eligible["check_data_first"] = eligible["actual_to_predicted_ratio"] > 5
     eligible.insert(0, "priority_rank", range(1, len(eligible) + 1))
     eligible.to_csv(ROOT / "outputs/audit_priority_ranking.csv", index=False)
     top_sets = {}

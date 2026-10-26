@@ -51,6 +51,7 @@ def clean(raw: pd.DataFrame, years: list[int]):
         # Original portal field used for `year`. LADBS instructions treat Program Year N as
         # calendar-year-N consumption data, so `year` is joined to same-year weather.
         "year_source_column": sources["year"],
+        "usable_rows_by_year": {int(k): int(v) for k, v in usable.groupby("year").size().items()},
         "raw_rows": len(raw), "selected_year_rows_before_dedup": selected_year_rows,
         "duplicate_rows_flagged": duplicate_rows, "rows_after_dedup": len(df),
         "invalid_or_missing_floor_area": int(invalid_area.sum()), "invalid_or_missing_site_eui": int(invalid_eui.sum()),

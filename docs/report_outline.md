@@ -41,6 +41,7 @@
 - Audit ranking should be reviewed by humans before outreach or spending
 - PY 2025 (calendar-2025 data, filed in 2026) is less complete than earlier years (6,603 usable rows vs. 7,566 in 2023), so the three-year eligibility rule excludes more buildings than it otherwise would
 - The highest-ranked buildings include special uses (data center, transportation terminal, refrigerated warehouse, parking). Their large residuals likely reflect operations the model can't see, or reporting errors, so rank 1 is not "least efficient"; candidates need human review before any outreach
+- `check_data_first` in `audit_priority_ranking.csv` marks buildings whose actual Site EUI is more than 5x the predicted value; check these for reporting errors before treating them as candidates
 
 ## 6. Conclusion
 
