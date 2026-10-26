@@ -24,8 +24,10 @@ ALIASES = {
 def clean(raw: pd.DataFrame, years: list[int]):
     raw = normalize_columns(raw)
     mapped = {}
+    sources = {}
     for target, aliases in ALIASES.items():
         source = find_column(raw.columns, aliases, required=target not in {"emissions", "latitude", "longitude", "postal_code"})
+        sources[target] = source
         mapped[target] = raw[source] if source else pd.NA
     df = pd.DataFrame(mapped)
     for c in ["year", "year_built", "floor_area", "site_eui", "emissions", "latitude", "longitude"]:
@@ -46,6 +48,9 @@ def clean(raw: pd.DataFrame, years: list[int]):
     usable = df[df["usable_target"]].copy()
     years_per = usable.groupby("building_id")["year"].nunique()
     report = {
+        # Original portal field used for `year`. LADBS instructions treat Program Year N as
+        # calendar-year-N consumption data, so `year` is joined to same-year weather.
+        "year_source_column": sources["year"],
         "raw_rows": len(raw), "selected_year_rows_before_dedup": selected_year_rows,
         "duplicate_rows_flagged": duplicate_rows, "rows_after_dedup": len(df),
         "invalid_or_missing_floor_area": int(invalid_area.sum()), "invalid_or_missing_site_eui": int(invalid_eui.sum()),

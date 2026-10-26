@@ -1,7 +1,7 @@
 {
-  "latest_batch_submitted": 8128,
-  "latest_batch_matched": 8006,
-  "cumulative_matched": 8006,
-  "total_buildings": 8128,
-  "cumulative_match_rate": 0.9849901574803149
+  "latest_batch_submitted": 139,
+  "latest_batch_matched": 16,
+  "cumulative_matched": 8022,
+  "total_buildings": 8145,
+  "cumulative_match_rate": 0.9848987108655617
 }

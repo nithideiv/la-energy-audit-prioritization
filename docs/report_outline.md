@@ -11,7 +11,8 @@
 - EBEWE source, years, original/retained sample sizes
 - NOAA stations, variables, units, flags, and coverage
 - Census geocoding match rate and nearest-station distances
-- Exact definition of reporting/compliance year
+- Exact definition of reporting/compliance year: `Program Year` N = calendar-year-N consumption (per LADBS instructions; see README section 7), matched to same-year weather
+- Note that PY 2025 filing is less complete than earlier years
 
 ## 3. Methods
 

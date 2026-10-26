@@ -69,10 +69,10 @@ The Census batch geocoder is deliberately a manual checkpoint so no addresses ar
 
 | Owner | Primary work | Handoff |
 |---|---|---|
-| Person 1 | EBEWE download, schema log, building cleaning | `buildings_clean.csv` + quality report |
-| Person 2 | NOAA download, quality flags, annual aggregation | `weather_annual.csv` |
-| Person 3 | Address review, Census batch, nearest station join | geocodes + match report |
-| Person 4 | EDA, grouped models, rankings, stability checks | figures + metrics + ranking |
+| Reda | EBEWE download, schema log, building cleaning | `buildings_clean.csv` + quality report |
+| Daryl | NOAA download, quality flags, annual aggregation | `weather_annual.csv` |
+| Srujan | Address review, Census batch, nearest station join | geocodes + match report |
+| Nithi | EDA, grouped models, rankings, stability checks | figures + metrics + ranking |
 
 Everyone should review the final exclusion rules and interpretation before submission.
 
@@ -82,9 +82,18 @@ Everyone should review the final exclusion rules and interpretation before submi
 - NOAA GHCN-Daily: https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily
 - Census Geocoder: https://geocoding.geo.census.gov/geocoder/
 
-## 7. Important issue to verify
+## 7. Year definition (checked)
 
-Confirm whether the EBEWE `Compliance Year` corresponds to the calendar year of energy consumption or to a later filing year. Keep the original year field and document the decision in the final report. The pipeline assumes the selected year is matched to weather from the same calendar year, but this should not be treated as settled until verified from the dataset documentation.
+The current portal export labels the year field `Program Year` (the portal description calls it the "Compliance Year"). The cleaning script reads it as `year` and also accepts the aliases `Compliance Year` and `Reporting Year`; the column actually used is recorded as `year_source_column` in `outputs/data_quality_report.json`.
 
-The current portal export labels this field `Program Year`; the cleaning script also accepts older aliases such as `Compliance Year` and `Reporting Year`.
+**Decision:** `Program Year` N is treated as the calendar year N of energy consumption, not a later filing year, so each building-year is matched to NOAA weather from the same calendar year.
+
+**Evidence:**
+- LADBS compliance instructions say utility data must be entered "for the applicable calendar year" matching the program year (e.g., PY 2019, 2020, 2021), and that PY 2019 data cannot be reused for PY 2020 or 2021. The 2018 scope-and-instructions document likewise ties Benchmark Year 2019 to calendar year 2019.
+- The data.lacity.org / data.gov dataset description says only that owners file a benchmark report "for the Compliance Year" and does not define it further.
+
+**Caveats for the final report:**
+- The evidence comes from LADBS instruction documents for earlier program years. We did not find a statement specific to PY 2023–2025, so confirm with LADBS (ladbs.ebewe@lacity.org) if the exact wording matters.
+- Filing for the most recent program year lags the consumption year. PY 2025 (calendar-2025 data, filed in 2026) has a lower share of rows with a Site EUI than earlier years (about 58% versus 65–68%), so 2025 may be incomplete and the three-year ranking eligibility rule may exclude more buildings than it otherwise would.
+- The original year field is kept unchanged in `buildings_clean.csv`.
 
