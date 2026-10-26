@@ -82,7 +82,7 @@ Everyone should review the final exclusion rules and interpretation before submi
 - NOAA GHCN-Daily: https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily
 - Census Geocoder: https://geocoding.geo.census.gov/geocoder/
 
-## 7. Year definition (checked)
+## 7. Year definition 
 
 The current portal export labels the year field `Program Year` (the portal description calls it the "Compliance Year"). The cleaning script reads it as `year` and also accepts the aliases `Compliance Year` and `Reporting Year`; the column actually used is recorded as `year_source_column` in `outputs/data_quality_report.json`.
 
