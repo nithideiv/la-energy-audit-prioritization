@@ -17,6 +17,8 @@ from project import load_config
 
 BASE_NUM = ["floor_area", "building_age", "latitude", "longitude", "year"]
 WEATHER = ["mean_temp_f", "total_prcp_mm", "hdd65", "cdd65", "hot_days_90f"]
+# Self-reported % occupied from the same annual benchmarking report. Not derived from energy use.
+OCC = ["occupancy"]
 CAT = ["property_type"]
 
 
@@ -60,6 +62,9 @@ def main():
         "linear_weather": (BASE_NUM + WEATHER, lambda: LinearRegression()),
         "rf_building": (BASE_NUM, lambda: RandomForestRegressor(n_estimators=300, min_samples_leaf=3, n_jobs=-1, random_state=cfg["random_state"])),
         "rf_weather": (BASE_NUM + WEATHER, lambda: RandomForestRegressor(n_estimators=300, min_samples_leaf=3, n_jobs=-1, random_state=cfg["random_state"])),
+        # Same models plus occupancy, scored on the same folds/seed so the with-vs-without comparison is direct.
+        "linear_weather_occ": (BASE_NUM + WEATHER + OCC, lambda: LinearRegression()),
+        "rf_weather_occ": (BASE_NUM + WEATHER + OCC, lambda: RandomForestRegressor(n_estimators=300, min_samples_leaf=3, n_jobs=-1, random_state=cfg["random_state"])),
     }
     rows = []
     splitter = GroupShuffleSplit(n_splits=1, test_size=.2, random_state=cfg["random_state"])

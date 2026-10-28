@@ -97,6 +97,7 @@ Everything downstream of the download is recomputed from the data, so rerunning 
 - Negative residuals are retained in annual predictions; they are not silently set to zero.
 - Rankings include model-choice sensitivity and top-decile overlap, not just one final ordered list.
 - Treat `check_data_first` buildings as records to verify before treating them as audit candidates.
+- Occupancy (`OCCUPANCY` in the raw file, a self-reported 0-100 percent) is tested only in the `*_occ` models, which are scored on the same folds and seed as their non-occupancy counterparts. It is blank only for buildings that never filed energy data, so it is missing in 0% of modeled rows. Values outside 0-100 are treated as missing. The ranking still uses `rf_weather`.
 
 ## 5. Interpreting the results
 
@@ -105,6 +106,8 @@ Compare models on the grouped out-of-fold rows of `model_metrics.csv` (the held-
 - A per-property-type median had the lowest MAE (22.2 kBtu/ft²), ahead of linear regression (24.6) and random forest (24.8). Linear regression had the best RMSE and R² (0.14).
 - Adding annual weather changed MAE by less than 0.02 kBtu/ft²; bootstrap intervals (in `report_stats.json`) include zero.
 - The ranking is therefore best read as a screen for persistent unexplained use, not as a measure of inefficiency. `07_model_and_rank.py` uses the random forest with weather as its primary model, which is not the lowest-MAE model, so check `model_ranking_stability.csv` before relying on exact rank positions.
+
+- Adding occupancy (`linear_weather_occ`, `rf_weather_occ`) lowered grouped out-of-fold MAE by about 0.03 kBtu/ft², and the bootstrap intervals in `occupancy_effect_bootstrap` include zero. Random forest RMSE and R² were slightly worse with it. Occupancy is 95-100% for most buildings, so it carries little signal; the exception is the few buildings below 50% occupied, which have much lower EUI.
 
 These numbers will shift if the data change; see `report_stats.json` for the current values.
 

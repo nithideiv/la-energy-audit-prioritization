@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,6 +17,8 @@ ALIASES = {
     "floor_area": ["gross_building_floor_area_ft", "property_gfa_calculated_buildings_and_parking_ft", "property_gfa_self_reported_ft", "gross_floor_area", "floor_area"],
     "site_eui": ["site_energy_use_intensity_eui_kbtu_ft", "site_eui_kbtu_ft", "site_eui", "site_energy_use_intensity_eui"],
     "emissions": ["total_ghg_emissions_metric_tons_co2e", "carbon_dioxide_emissions_metric_ton_co2e", "ghg_emissions"],
+    # Self-reported % of the building occupied (0-100); blank for buildings that never filed energy data.
+    "occupancy": ["occupancy", "occupancy_percent", "occupancy_pct"],
     "latitude": ["latitude", "lat"],
     "longitude": ["longitude", "lon", "lng"],
 }
@@ -26,12 +29,14 @@ def clean(raw: pd.DataFrame, years: list[int]):
     mapped = {}
     sources = {}
     for target, aliases in ALIASES.items():
-        source = find_column(raw.columns, aliases, required=target not in {"emissions", "latitude", "longitude", "postal_code"})
+        source = find_column(raw.columns, aliases, required=target not in {"emissions", "occupancy", "latitude", "longitude", "postal_code"})
         sources[target] = source
         mapped[target] = raw[source] if source else pd.NA
     df = pd.DataFrame(mapped)
-    for c in ["year", "year_built", "floor_area", "site_eui", "emissions", "latitude", "longitude"]:
+    for c in ["year", "year_built", "floor_area", "site_eui", "emissions", "occupancy", "latitude", "longitude"]:
         df[c] = numeric(df[c])
+    # Occupancy is a percentage; anything outside 0-100 is a reporting error, so treat it as missing.
+    df.loc[~df["occupancy"].between(0, 100), "occupancy"] = np.nan
     df["building_id"] = df["building_id"].astype("string").str.strip()
     df["address"] = df["address"].astype("string").str.strip().str.upper()
     df["property_type"] = df["property_type"].astype("string").str.strip().replace("", pd.NA)

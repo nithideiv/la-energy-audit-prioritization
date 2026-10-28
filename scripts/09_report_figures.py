@@ -97,6 +97,13 @@ def compute_stats(o, r, metrics, cfg):
         "linear": paired_bootstrap_mae_diff(o, "pred_linear_weather", "pred_linear_building", seed),
         "n_bootstrap": N_BOOT}
 
+    # Occupancy benefit (does adding self-reported occupancy to the weather models change grouped out-of-fold error?)
+    if {"pred_rf_weather_occ", "pred_linear_weather_occ"} <= set(o.columns):
+        stats["occupancy_effect_bootstrap"] = {
+            "random_forest": paired_bootstrap_mae_diff(o, "pred_rf_weather_occ", "pred_rf_weather", seed),
+            "linear": paired_bootstrap_mae_diff(o, "pred_linear_weather_occ", "pred_linear_weather", seed),
+            "n_bootstrap": N_BOOT}
+
     # Residual behaviour
     stats["residuals"] = {"mean": float(o["res"].mean()), "median": float(o["res"].median()),
                           "share_positive": float((o["res"] > 0).mean())}
