@@ -107,7 +107,7 @@ Compare models on the grouped out-of-fold rows of `model_metrics.csv` (the held-
 - Adding annual weather changed MAE by less than 0.02 kBtu/ft²; bootstrap intervals (in `report_stats.json`) include zero.
 - The ranking is therefore best read as a screen for persistent unexplained use, not as a measure of inefficiency. `07_model_and_rank.py` uses the random forest with weather as its primary model, which is not the lowest-MAE model, so check `model_ranking_stability.csv` before relying on exact rank positions.
 
-- Adding occupancy (`linear_weather_occ`, `rf_weather_occ`) lowered grouped out-of-fold MAE by about 0.03 kBtu/ft², and the bootstrap intervals in `occupancy_effect_bootstrap` include zero. Random forest RMSE and R² were slightly worse with it. Occupancy is 95-100% for most buildings, so it carries little signal; the exception is the few buildings below 50% occupied, which have much lower EUI.
+- Adding occupancy (`linear_weather_occ`, `rf_weather_occ`) lowered grouped out-of-fold MAE by 0.03 (linear) and 0.06 (random forest) kBtu/ft², and the bootstrap intervals in `occupancy_effect_bootstrap` include zero, so the gain is not distinguishable from noise. Random forest RMSE and R² were slightly worse with it. Occupancy is 95-100% for most buildings, so it carries little signal; the exception is the few buildings below 50% occupied, which have much lower EUI.
 
 These numbers will shift if the data change; see `report_stats.json` for the current values.
 

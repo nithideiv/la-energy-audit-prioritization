@@ -28,13 +28,14 @@
 
 - EDA and missingness
 - Building-only versus weather-added metrics
+- Occupancy-added metrics (`*_occ` models) and the occupancy bootstrap in `report_stats.json`
 - Residual checks by property type/year
 - Ranked candidates and repeated positive residuals
 - Top-10% Jaccard overlap across years/models
 
 ## 5. Limitations and ethics
 
-- Unobserved occupancy, schedules, vacancies, renovations, and special uses
+- Occupancy is only a self-reported annual percent (tested in the `*_occ` models, with no significant gain); hourly schedules, vacancies, renovations, and special uses are still unobserved
 - Reporting and geocoding error
 - Three weather stations simplify microclimates
 - Model residuals are not causal savings estimates
