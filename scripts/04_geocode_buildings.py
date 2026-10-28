@@ -61,7 +61,7 @@ def parse(path: Path):
                 "side": tail[trailing_start + 1].strip() if len(tail) > trailing_start + 1 else "",
             })
     geo = pd.DataFrame(records)
-    coords = geo["coordinates"].str.split(",", expand=True)
+    coords = geo["coordinates"].str.split(",", expand=True).reindex(columns=[0, 1])  # no matches -> NaN columns instead of a KeyError
     geo["longitude"] = pd.to_numeric(coords[0], errors="coerce")
     geo["latitude"] = pd.to_numeric(coords[1], errors="coerce")
     matched = geo["match"].astype(str).str.lower().eq("match") & geo["latitude"].notna()

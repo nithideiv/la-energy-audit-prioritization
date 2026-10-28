@@ -2,6 +2,15 @@ model_a,model_b,top_decile_jaccard
 linear_building,linear_weather,0.9912663755458515
 linear_building,rf_building,0.6724137931034483
 linear_building,rf_weather,0.6747404844290658
+linear_building,linear_weather_occ,0.978448275862069
+linear_building,rf_weather_occ,0.6829268292682927
 linear_weather,rf_building,0.6724137931034483
 linear_weather,rf_weather,0.6747404844290658
+linear_weather,linear_weather_occ,0.9699570815450643
+linear_weather,rf_weather_occ,0.6829268292682927
 rf_building,rf_weather,0.9655172413793104
+rf_building,linear_weather_occ,0.6712328767123288
+rf_building,rf_weather_occ,0.924812030075188
+rf_weather,linear_weather_occ,0.6735395189003437
+rf_weather,rf_weather_occ,0.9283018867924528
+linear_weather_occ,rf_weather_occ,0.6816608996539792
