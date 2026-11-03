@@ -18,4 +18,6 @@ hot_day_threshold_f: 90
 site_eui_model_max: 2000
 random_state: 461
 n_splits: 5
+peer_neighbors: 10
+peer_min_neighbors: 8
 

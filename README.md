@@ -36,6 +36,7 @@ python scripts/05_build_model_table.py
 python scripts/06_eda.py
 python scripts/07_model_and_rank.py      # slowest step: several minutes (random forests, 5-fold + held-out)
 python scripts/08_cluster.py
+python scripts/10_peer_compare.py        # explicit like-for-like building comparisons
 python scripts/09_report_figures.py      # report figures + report_stats.json (seconds; trains nothing)
 ```
 
@@ -53,13 +54,15 @@ The Census batch geocoder is deliberately a manual checkpoint so no addresses ar
 | 6 | `06_eda.py` | model table | EDA figures, `outputs/missingness.csv` |
 | 7 | `07_model_and_rank.py` | model table | metrics, out-of-fold predictions, ranking, stability, extreme-EUI review file |
 | 8 | `08_cluster.py` | model table | cluster tables |
-| 9 | `09_report_figures.py` | outputs of steps 3–8 | report figures, `outputs/report_stats.json` |
+| 9 | `10_peer_compare.py` | model table | annual peer comparisons and peer-based audit ranking |
+| 10 | `09_report_figures.py` | outputs of steps 3–8 plus peer ranking | report figures, `outputs/report_stats.json` |
 
 ## 3. Outputs
 
 Data files:
 
 - `data/processed/buildings_clean.csv`: cleaned building-year rows
+- `data/processed/buildings_excluded.csv`: excluded building-years with a specific exclusion reason
 - `data/processed/weather_annual.csv`: station-year weather features
 - `data/processed/model_table.csv`: modeling table after nearest-station join
 
@@ -73,6 +76,8 @@ Reports and tables in `outputs/`:
 - `oof_predictions.csv`: predictions made without training on the scored building
 - `extreme_site_eui_review.csv`: rows above the Site EUI cap (`site_eui_model_max` in `config.yml`), set aside for review and not modeled
 - `audit_priority_ranking.csv`: three-year candidate ranking, with `actual_to_predicted_ratio` and a `check_data_first` flag (ratio above 5) for likely data problems or special uses; the flag does not change the order
+- `building_consistency_flags.csv`: buildings whose reported area, year built, property type, or number of buildings need review
+- `peer_comparisons_annual.csv`, `audit_peer_ranking.csv`: direct comparisons with the 10 nearest same-type, same-year peers, matched on size, age, location, and occupancy. Only stable one-building records with at least 8 peers are compared. `check_data_first` flags an average actual-to-peer-median ratio above 5.
 - `model_ranking_stability.csv`: top-decile overlap (Jaccard) across models
 - `cluster_selection.csv`, `cluster_summary.csv`, `building_year_clusters.csv`: exploratory k-means results
 - `report_stats.json`: every number quoted in the report (variable summaries, weather-effect bootstrap, residual persistence, ranking concentration, top 10, plus the metrics and reports above)
@@ -97,6 +102,7 @@ Everything downstream of the download is recomputed from the data, so rerunning 
 - Negative residuals are retained in annual predictions; they are not silently set to zero.
 - Rankings include model-choice sensitivity and top-decile overlap, not just one final ordered list.
 - Treat `check_data_first` buildings as records to verify before treating them as audit candidates.
+- The peer ranking excludes records with changing reported core characteristics, multiple-building reporting boundaries, or floor area below 1,000 ft². It ranks only buildings above their peer median in at least two years and on average.
 - Occupancy (`OCCUPANCY` in the raw file, a self-reported 0-100 percent) is tested only in the `*_occ` models, which are scored on the same folds and seed as their non-occupancy counterparts. It is blank only for buildings that never filed energy data, so it is missing in 0% of modeled rows. Values outside 0-100 are treated as missing. The ranking still uses `rf_weather`.
 
 ## 5. Interpreting the results

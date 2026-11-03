@@ -1,3 +1,11 @@
 .DS_Store
 __pycache__/
 *.pyc
+
+# Regenerated pipeline intermediates, processed data, and analysis artifacts.
+data/interim/*
+!data/interim/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+outputs/*
+!outputs/.gitkeep

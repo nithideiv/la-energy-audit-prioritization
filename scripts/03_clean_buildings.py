@@ -19,21 +19,22 @@ ALIASES = {
     "emissions": ["total_ghg_emissions_metric_tons_co2e", "carbon_dioxide_emissions_metric_ton_co2e", "ghg_emissions"],
     # Self-reported % of the building occupied (0-100); blank for buildings that never filed energy data.
     "occupancy": ["occupancy", "occupancy_percent", "occupancy_pct"],
+    "number_of_buildings": ["number_of_buildings", "building_count"],
     "latitude": ["latitude", "lat"],
     "longitude": ["longitude", "lon", "lng"],
 }
 
 
-def clean(raw: pd.DataFrame, years: list[int]):
+def clean_with_exclusions(raw: pd.DataFrame, years: list[int]):
     raw = normalize_columns(raw)
     mapped = {}
     sources = {}
     for target, aliases in ALIASES.items():
-        source = find_column(raw.columns, aliases, required=target not in {"emissions", "occupancy", "latitude", "longitude", "postal_code"})
+        source = find_column(raw.columns, aliases, required=target not in {"emissions", "occupancy", "number_of_buildings", "latitude", "longitude", "postal_code"})
         sources[target] = source
         mapped[target] = raw[source] if source else pd.NA
     df = pd.DataFrame(mapped)
-    for c in ["year", "year_built", "floor_area", "site_eui", "emissions", "occupancy", "latitude", "longitude"]:
+    for c in ["year", "year_built", "floor_area", "site_eui", "emissions", "occupancy", "number_of_buildings", "latitude", "longitude"]:
         df[c] = numeric(df[c])
     # Occupancy is a percentage; anything outside 0-100 is a reporting error, so treat it as missing.
     df.loc[~df["occupancy"].between(0, 100), "occupancy"] = np.nan
@@ -49,8 +50,13 @@ def clean(raw: pd.DataFrame, years: list[int]):
     df = df.sort_values(["building_id", "year", "_complete"], ascending=[True, True, False]).drop_duplicates(["building_id", "year"]).drop(columns="_complete")
     invalid_area = df["floor_area"].le(0) | df["floor_area"].isna()
     invalid_eui = df["site_eui"].le(0) | df["site_eui"].isna()
+    reasons = pd.Series("", index=df.index, dtype="string")
+    reasons.loc[invalid_area] += "missing_or_invalid_floor_area;"
+    reasons.loc[invalid_eui] += "missing_or_invalid_site_eui;"
+    df["exclusion_reason"] = reasons.str.rstrip(";").replace("", pd.NA)
     df["usable_target"] = ~(invalid_area | invalid_eui)
     usable = df[df["usable_target"]].copy()
+    excluded = df[~df["usable_target"]].copy()
     years_per = usable.groupby("building_id")["year"].nunique()
     report = {
         # Original portal field used for `year`. LADBS instructions treat Program Year N as
@@ -64,16 +70,23 @@ def clean(raw: pd.DataFrame, years: list[int]):
         "usable_buildings_all_three_years": int((years_per == len(years)).sum()),
         "missing_by_column": df.isna().sum().astype(int).to_dict(),
     }
+    return usable, excluded, report
+
+
+def clean(raw: pd.DataFrame, years: list[int]):
+    """Backward-compatible cleaner used by tests and downstream callers."""
+    usable, _, report = clean_with_exclusions(raw, years)
     return usable, report
 
 
 def main():
     cfg = load_config()
     raw = pd.read_csv(ROOT / "data/raw/ebewe_all.csv", low_memory=False)
-    clean_df, report = clean(raw, cfg["years"])
+    clean_df, excluded, report = clean_with_exclusions(raw, cfg["years"])
     out = ROOT / "data/processed/buildings_clean.csv"
     out.parent.mkdir(parents=True, exist_ok=True)
     clean_df.to_csv(out, index=False)
+    excluded.to_csv(ROOT / "data/processed/buildings_excluded.csv", index=False)
     write_json(ROOT / "outputs/data_quality_report.json", report)
     print(report)
 

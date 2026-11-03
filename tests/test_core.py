@@ -42,3 +42,16 @@ def test_clean_keeps_valid_occupancy_and_blanks_out_of_range():
     occ = usable.set_index("building_id")["occupancy"]
     assert occ["1"] == 100 and occ["2"] == 0   # 0% (vacant) is valid, not missing
     assert np.isnan(occ["3"]) and np.isnan(occ["4"])  # out-of-range and blank both become missing
+
+
+def test_clean_records_specific_exclusion_reasons():
+    raw = pd.DataFrame({
+        "BUILDING ID": ["1", "2"], "BUILDING ADDRESS": ["A", "B"],
+        "PROGRAM YEAR": [2023, 2023], "PROPERTY TYPE": ["Office", "Office"],
+        "GROSS BUILDING FLOOR AREA (ft²)": [None, 10000],
+        "SITE ENERGY USE INTENSITY (EUI) (kBtu/ft²)": [None, None],
+        "YEAR BUILT": [1990, 1990],
+    })
+    _, excluded, _ = _load_cleaner().clean_with_exclusions(raw, [2023])
+    assert excluded.loc[excluded["building_id"] == "1", "exclusion_reason"].item() == "missing_or_invalid_floor_area;missing_or_invalid_site_eui"
+    assert excluded.loc[excluded["building_id"] == "2", "exclusion_reason"].item() == "missing_or_invalid_site_eui"

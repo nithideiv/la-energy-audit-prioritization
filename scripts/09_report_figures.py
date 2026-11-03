@@ -137,6 +137,20 @@ def compute_stats(o, r, metrics, cfg):
                              "mean_predicted_site_eui", "mean_annual_excess_kbtu",
                              "actual_to_predicted_ratio", "check_data_first"]].to_dict("records")}
 
+    peer = pd.read_csv(OUT / "audit_peer_ranking.csv")
+    annual_peer = pd.read_csv(OUT / "peer_comparisons_annual.csv")
+    stats["peer_comparison"] = {
+        "compared_building_years": len(annual_peer),
+        "ranked_buildings": len(peer),
+        "peer_neighbors_minimum": int(annual_peer["peer_count"].min()) if len(annual_peer) else 0,
+        "positive_mean_excess_required": True,
+        "check_data_first": int(peer["check_data_first"].sum()),
+        "top10": peer.head(10)[["peer_priority_rank", "property_type", "floor_area",
+                                 "mean_actual_site_eui", "mean_peer_median_site_eui",
+                                 "mean_peer_excess_kbtu", "mean_actual_to_peer_median_ratio",
+                                 "check_data_first"]].to_dict("records"),
+    }
+
     # Other reports, passed through for one-stop reference
     stats["model_metrics"] = metrics.to_dict("records")
     stats["ranking_stability"] = pd.read_csv(OUT / "model_ranking_stability.csv").to_dict("records")
