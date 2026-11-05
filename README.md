@@ -76,8 +76,10 @@ Reports and tables in `outputs/`:
 - `oof_predictions.csv`: predictions made without training on the scored building
 - `extreme_site_eui_review.csv`: rows above the Site EUI cap (`site_eui_model_max` in `config.yml`), set aside for review and not modeled
 - `audit_priority_ranking.csv`: three-year candidate ranking, with `actual_to_predicted_ratio` and a `check_data_first` flag (ratio above 5) for likely data problems or special uses; the flag does not change the order
-- `building_consistency_flags.csv`: buildings whose reported area, year built, property type, or number of buildings need review
+- `building_consistency_flags.csv`, `building_data_review_queue.csv`: buildings whose reported area, year built, property type, or number of buildings need review, with the reported values for each year.
 - `peer_comparisons_annual.csv`, `audit_peer_ranking.csv`: direct comparisons with the 10 nearest same-type, same-year peers, matched on size, age, location, and occupancy. Only stable one-building records with at least 8 peers are compared. `check_data_first` flags an average actual-to-peer-median ratio above 5.
+- `peer_outlier_review.csv`: annual peer comparisons for every `check_data_first` candidate, to review before recommending an audit.
+- `peer_ranking_sensitivity.csv`, `peer_sensitivity_summary.csv`: rankings for 8, 10, and 15 peers and the overlap of their top deciles.
 - `model_ranking_stability.csv`: top-decile overlap (Jaccard) across models
 - `cluster_selection.csv`, `cluster_summary.csv`, `building_year_clusters.csv`: exploratory k-means results
 - `report_stats.json`: every number quoted in the report (variable summaries, weather-effect bootstrap, residual persistence, ranking concentration, top 10, plus the metrics and reports above)

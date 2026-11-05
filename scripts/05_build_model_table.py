@@ -29,6 +29,16 @@ def building_quality_flags(df: pd.DataFrame) -> pd.DataFrame:
         "property_type_changed", "year_built_changed", "floor_area_changed_over_20pct",
         "reported_multiple_buildings", "implausibly_small_floor_area",
     ]].any(axis=1)
+    review_labels = {
+        "property_type_changed": "property_type_changed",
+        "year_built_changed": "year_built_changed",
+        "floor_area_changed_over_20pct": "floor_area_changed_over_20pct",
+        "reported_multiple_buildings": "reported_multiple_buildings",
+        "implausibly_small_floor_area": "implausibly_small_floor_area",
+    }
+    flags["review_reasons"] = flags.apply(
+        lambda row: ";".join(label for column, label in review_labels.items() if row[column]), axis=1
+    )
     return flags
 
 
@@ -57,6 +67,14 @@ def main():
     flags = building_quality_flags(model)
     flags.to_csv(ROOT / "outputs/building_consistency_flags.csv", index=False)
     model = model.merge(flags, on="building_id", how="left", validate="many_to_one")
+    review_columns = [
+        "building_id", "address", "year", "property_type", "floor_area", "year_built",
+        "number_of_buildings", "site_eui", "occupancy", "review_reasons",
+        "floor_area_change_ratio",
+    ]
+    model.loc[model["needs_data_review"], review_columns].sort_values(
+        ["review_reasons", "building_id", "year"]
+    ).to_csv(ROOT / "outputs/building_data_review_queue.csv", index=False)
     model.to_csv(ROOT / "data/processed/model_table.csv", index=False)
     report = {"building_year_rows": len(model), "geocoded_rows": int(model["station_id"].notna().sum()), "weather_joined_rows": int(model["mean_temp_f"].notna().sum()), "median_station_distance_miles": float(model["station_distance_miles"].median()), "buildings_needing_data_review": int(flags["needs_data_review"].sum())}
     write_json(ROOT / "outputs/join_report.json", report)

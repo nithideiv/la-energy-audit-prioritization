@@ -20,4 +20,5 @@ random_state: 461
 n_splits: 5
 peer_neighbors: 10
 peer_min_neighbors: 8
+peer_neighbors_sensitivity: [8, 10, 15]
 

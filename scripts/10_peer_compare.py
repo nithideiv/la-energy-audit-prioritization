@@ -1,7 +1,7 @@
 """Compare each eligible building with nearby peers that share its use and year.
 
 Peers are selected without using energy use: the matching features are log floor
-area, age, location, and occupancy.  The result is a screening list, not proof
+area, age, location, and occupancy. The result is a screening list, not proof
 that a building wastes energy.
 """
 from pathlib import Path
@@ -36,8 +36,7 @@ def compare_group(group: pd.DataFrame, k: int, min_peers: int) -> pd.DataFrame:
     group = group.copy()
     if len(group) - 1 < min_peers:
         return pd.DataFrame()
-    x = group[FEATURES].to_numpy()
-    x = StandardScaler().fit_transform(x)
+    x = StandardScaler().fit_transform(group[FEATURES].to_numpy())
     neighbor_count = min(k + 1, len(group))
     distances, positions = NearestNeighbors(n_neighbors=neighbor_count).fit(x).kneighbors(x)
     rows = []
@@ -63,19 +62,14 @@ def compare_group(group: pd.DataFrame, k: int, min_peers: int) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def main():
-    cfg = load_config()
-    df = pd.read_csv(ROOT / "data/processed/model_table.csv", dtype={"building_id": str})
-    df["log_floor_area"] = np.log(df["floor_area"])
+def rank_peers(df: pd.DataFrame, cfg: dict, k: int) -> tuple[pd.DataFrame, pd.DataFrame]:
     eligible = df.loc[peer_eligibility(df, cfg["site_eui_model_max"])].copy()
     parts = [
-        compare_group(group, cfg["peer_neighbors"], cfg["peer_min_neighbors"])
+        compare_group(group, k, cfg["peer_min_neighbors"])
         for _, group in eligible.groupby(["year", "property_type"], observed=True)
     ]
     annual = pd.concat([part for part in parts if not part.empty], ignore_index=True)
     annual["peer_excess_kbtu"] = annual["peer_eui_excess"] * annual["floor_area"]
-    annual.to_csv(ROOT / "outputs/peer_comparisons_annual.csv", index=False)
-
     summary = annual.groupby("building_id").agg(
         years_with_peers=("year", "nunique"),
         positive_peer_years=("peer_eui_excess", lambda x: int((x > 0).sum())),
@@ -92,11 +86,53 @@ def main():
         & (summary["positive_peer_years"] >= 2)
         & (summary["mean_peer_excess_kbtu"] > 0)
     ].sort_values("mean_peer_excess_kbtu", ascending=False).reset_index(drop=True)
-    # Keep the screening order, but distinguish exceptionally large peer gaps
-    # that should be verified before an audit recommendation is acted on.
     ranked["check_data_first"] = ranked["mean_actual_to_peer_median_ratio"].gt(5)
     ranked.insert(0, "peer_priority_rank", range(1, len(ranked) + 1))
+    return annual, ranked
+
+
+def sensitivity_outputs(df: pd.DataFrame, cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame]:
+    rankings, top_sets, summary_rows = [], {}, []
+    for k in cfg["peer_neighbors_sensitivity"]:
+        _, ranked = rank_peers(df, cfg, k)
+        n_top = max(1, int(np.ceil(len(ranked) * .10))) if len(ranked) else 0
+        top_sets[k] = set(ranked.head(n_top)["building_id"])
+        rankings.append(ranked.assign(peer_neighbors=k))
+        summary_rows.append({
+            "row_type": "ranking", "peer_neighbors": k, "candidate_buildings": len(ranked),
+            "top_decile_size": n_top, "comparison_peer_neighbors": pd.NA,
+            "top_decile_jaccard": pd.NA,
+        })
+    for i, first_k in enumerate(cfg["peer_neighbors_sensitivity"]):
+        for second_k in cfg["peer_neighbors_sensitivity"][i + 1:]:
+            union = top_sets[first_k] | top_sets[second_k]
+            summary_rows.append({
+                "row_type": "top_decile_overlap", "peer_neighbors": first_k,
+                "candidate_buildings": pd.NA, "top_decile_size": pd.NA,
+                "comparison_peer_neighbors": second_k,
+                "top_decile_jaccard": len(top_sets[first_k] & top_sets[second_k]) / len(union) if union else np.nan,
+            })
+    return pd.concat(rankings, ignore_index=True), pd.DataFrame(summary_rows)
+
+
+def main():
+    cfg = load_config()
+    df = pd.read_csv(ROOT / "data/processed/model_table.csv", dtype={"building_id": str})
+    df["log_floor_area"] = np.log(df["floor_area"])
+    annual, ranked = rank_peers(df, cfg, cfg["peer_neighbors"])
+    context = df[["building_id", "year", "address", "occupancy", "building_age", "number_of_buildings"]]
+    annual = annual.merge(context, on=["building_id", "year"], how="left", validate="one_to_one")
+    annual.to_csv(ROOT / "outputs/peer_comparisons_annual.csv", index=False)
     ranked.to_csv(ROOT / "outputs/audit_peer_ranking.csv", index=False)
+
+    ranked_context = ranked[["building_id", "peer_priority_rank", "check_data_first"]]
+    annual.merge(ranked_context[ranked_context["check_data_first"]], on="building_id", how="inner").sort_values(
+        ["peer_priority_rank", "year"]
+    ).to_csv(ROOT / "outputs/peer_outlier_review.csv", index=False)
+
+    sensitivity, sensitivity_summary = sensitivity_outputs(df, cfg)
+    sensitivity.to_csv(ROOT / "outputs/peer_ranking_sensitivity.csv", index=False)
+    sensitivity_summary.to_csv(ROOT / "outputs/peer_sensitivity_summary.csv", index=False)
     print(f"Compared {len(annual):,} building-years and ranked {len(ranked):,} stable peer candidates")
 
 

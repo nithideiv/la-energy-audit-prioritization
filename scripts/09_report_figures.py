@@ -139,6 +139,7 @@ def compute_stats(o, r, metrics, cfg):
 
     peer = pd.read_csv(OUT / "audit_peer_ranking.csv")
     annual_peer = pd.read_csv(OUT / "peer_comparisons_annual.csv")
+    peer_sensitivity = pd.read_csv(OUT / "peer_sensitivity_summary.csv")
     stats["peer_comparison"] = {
         "compared_building_years": len(annual_peer),
         "ranked_buildings": len(peer),
@@ -150,6 +151,7 @@ def compute_stats(o, r, metrics, cfg):
                                  "mean_peer_excess_kbtu", "mean_actual_to_peer_median_ratio",
                                  "check_data_first"]].to_dict("records"),
     }
+    stats["peer_sensitivity"] = peer_sensitivity.to_dict("records")
 
     # Other reports, passed through for one-stop reference
     stats["model_metrics"] = metrics.to_dict("records")
