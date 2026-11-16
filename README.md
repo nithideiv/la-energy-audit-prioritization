@@ -1,6 +1,6 @@
 # LA Building Energy Audit Prioritization
 
-Project for CSCI 461. It downloads 2023–2025 Los Angeles EBEWE records and NOAA GHCN-Daily observations, cleans and joins them, compares building-only and building-plus-weather regression models using building-grouped validation, and produces a cautious audit-priority ranking.
+Project downloads 2023–2025 Los Angeles EBEWE records and NOAA GHCN-Daily observations, cleans and joins them, compares building-only and building-plus-weather regression models using building-grouped validation, and produces a cautious audit-priority ranking.
 
 ## Research question
 
@@ -125,24 +125,14 @@ These numbers will shift if the data change; see `report_stats.json` for the cur
 pytest -q tests
 ```
 
-## 7. Team split
 
-| Owner | Primary work | Handoff |
-|---|---|---|
-| Reda | EBEWE download, schema log, building cleaning | `buildings_clean.csv` + quality report |
-| Daryl | NOAA download, quality flags, annual aggregation | `weather_annual.csv` |
-| Srujan | Address review, Census batch, nearest station join | geocodes + match report |
-| Nithi | EDA, grouped models, rankings, stability checks, report figures | figures + metrics + ranking + `report_stats.json` |
-
-Everyone should review the final exclusion rules and interpretation before submission.
-
-## 8. Data sources
+## 7. Data sources
 
 - LA EBEWE: https://data.lacity.org/d/9yda-i4ya
 - NOAA GHCN-Daily: https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily
 - Census Geocoder: https://geocoding.geo.census.gov/geocoder/
 
-## 9. Year definition
+## 8. Year definition
 
 The current portal export labels the year field `Program Year` (the portal description calls it the "Compliance Year"). The cleaning script reads it as `year` and also accepts the aliases `Compliance Year` and `Reporting Year`; the column actually used is recorded as `year_source_column` in `outputs/data_quality_report.json`.
 
