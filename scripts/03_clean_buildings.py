@@ -33,7 +33,13 @@ def clean_with_exclusions(raw: pd.DataFrame, years: list[int]):
         source = find_column(raw.columns, aliases, required=target not in {"emissions", "occupancy", "number_of_buildings", "latitude", "longitude", "postal_code"})
         sources[target] = source
         mapped[target] = raw[source] if source else pd.NA
+    status_source = find_column(raw.columns, ["compliance_status"], required=False)
+    mapped["_compliance_status"] = raw[status_source] if status_source else pd.NA
     df = pd.DataFrame(mapped)
+    df["_compliance_status"] = (
+        df["_compliance_status"].astype("string").str.strip().str.upper()
+        .replace("", pd.NA).fillna("UNKNOWN")
+    )
     for c in ["year", "year_built", "floor_area", "site_eui", "emissions", "occupancy", "number_of_buildings", "latitude", "longitude"]:
         df[c] = numeric(df[c])
     # Occupancy is a percentage; anything outside 0-100 is a reporting error, so treat it as missing.
@@ -55,6 +61,11 @@ def clean_with_exclusions(raw: pd.DataFrame, years: list[int]):
     reasons.loc[invalid_eui] += "missing_or_invalid_site_eui;"
     df["exclusion_reason"] = reasons.str.rstrip(";").replace("", pd.NA)
     df["usable_target"] = ~(invalid_area | invalid_eui)
+    excluded_by_year_and_status = {
+        int(year): group.groupby("_compliance_status").size().astype(int).to_dict()
+        for year, group in df.loc[~df["usable_target"]].groupby("year")
+    }
+    df = df.drop(columns="_compliance_status")
     usable = df[df["usable_target"]].copy()
     excluded = df[~df["usable_target"]].copy()
     years_per = usable.groupby("building_id")["year"].nunique()
@@ -63,6 +74,7 @@ def clean_with_exclusions(raw: pd.DataFrame, years: list[int]):
         # calendar-year-N consumption data, so `year` is joined to same-year weather.
         "year_source_column": sources["year"],
         "usable_rows_by_year": {int(k): int(v) for k, v in usable.groupby("year").size().items()},
+        "excluded_rows_by_year_and_compliance_status": excluded_by_year_and_status,
         "raw_rows": len(raw), "selected_year_rows_before_dedup": selected_year_rows,
         "duplicate_rows_flagged": duplicate_rows, "rows_after_dedup": len(df),
         "invalid_or_missing_floor_area": int(invalid_area.sum()), "invalid_or_missing_site_eui": int(invalid_eui.sum()),

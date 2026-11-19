@@ -68,7 +68,11 @@ Data files:
 
 Reports and tables in `outputs/`:
 
-- `data_quality_report.json`: exclusions, duplicates, coverage, the source column used for the year (`year_source_column`), and usable rows per year (`usable_rows_by_year`)
+- `data_quality_report.json`: exclusions, duplicates, coverage, the source column used for the year (`year_source_column`), and usable rows per year (`usable_rows_by_year`).
+  `excluded_rows_by_year_and_compliance_status` counts excluded records by year and compliance status after duplicate removal.
+  Each excluded record is counted once, even if both floor area and Site EUI are invalid.
+  Status labels are trimmed and upper-cased. Missing or blank statuses (including a missing source column) use `UNKNOWN`.
+  Only year/status groups with exclusions are included.
 - `geocoding_report.json`: match rate
 - `join_report.json`: rows geocoded and joined to weather, median station distance
 - `missingness.csv`: missing fraction per column in the model table
