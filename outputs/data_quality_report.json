@@ -1,48 +1,48 @@
 {
   "year_source_column": "program_year",
   "usable_rows_by_year": {
-    "2023": 7566,
-    "2024": 7354,
-    "2025": 6603
+    "2023": 7575,
+    "2024": 7373,
+    "2025": 6669
   },
   "excluded_rows_by_year_and_compliance_status": {
     "2023": {
-      "COMPLIED": 86,
-      "NOT COMPLIED": 3591
+      "COMPLIED": 87,
+      "NOT COMPLIED": 3581
     },
     "2024": {
-      "COMPLIED": 77,
-      "NOT COMPLIED": 3800
+      "COMPLIED": 80,
+      "NOT COMPLIED": 3777
     },
     "2025": {
       "COMPLIED": 68,
-      "NOT COMPLIED": 4570
+      "NOT COMPLIED": 4500
     }
   },
-  "raw_rows": 96156,
-  "selected_year_rows_before_dedup": 33715,
+  "raw_rows": 96151,
+  "selected_year_rows_before_dedup": 33710,
   "duplicate_rows_flagged": 0,
-  "rows_after_dedup": 33715,
-  "invalid_or_missing_floor_area": 11937,
-  "invalid_or_missing_site_eui": 12192,
-  "usable_rows": 21523,
-  "usable_unique_buildings": 8145,
-  "usable_buildings_all_three_years": 5967,
+  "rows_after_dedup": 33710,
+  "invalid_or_missing_floor_area": 11835,
+  "invalid_or_missing_site_eui": 12093,
+  "usable_rows": 21617,
+  "usable_unique_buildings": 8158,
+  "usable_buildings_all_three_years": 6024,
   "missing_by_column": {
     "building_id": 0,
     "address": 0,
     "year": 0,
-    "property_type": 11937,
+    "property_type": 11835,
     "postal_code": 0,
-    "year_built": 11937,
-    "floor_area": 11937,
-    "site_eui": 12142,
-    "emissions": 12129,
-    "occupancy": 11937,
-    "number_of_buildings": 11937,
-    "latitude": 33715,
-    "longitude": 33715,
-    "exclusion_reason": 21523,
+    "year_built": 11835,
+    "floor_area": 11835,
+    "site_eui": 12043,
+    "emissions": 12030,
+    "occupancy": 11835,
+    "number_of_buildings": 11835,
+    "latitude": 33710,
+    "longitude": 33710,
+    "exclusion_reason": 21617,
     "usable_target": 0
   }
 }

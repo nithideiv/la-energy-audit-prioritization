@@ -1,61 +1,61 @@
 {
   "rows": {
-    "modeled_rows": 21178,
-    "modeled_buildings": 8016,
+    "modeled_rows": 21272,
+    "modeled_buildings": 8029,
     "rows_by_year": {
-      "2023": 7445,
-      "2024": 7238,
-      "2025": 6495
+      "2023": 7454,
+      "2024": 7257,
+      "2025": 6561
     }
   },
   "buildings_by_years_present": {
-    "1": 719,
-    "2": 1432,
-    "3": 5865
+    "1": 708,
+    "2": 1399,
+    "3": 5922
   },
   "variable_summary": {
     "site_eui": {
-      "mean": 45.65387666446312,
-      "std": 65.42036127531352,
-      "median": 35.1,
-      "p95": 119.2,
+      "mean": 45.82448758931929,
+      "std": 66.7182438579298,
+      "median": 35.150000000000006,
+      "p95": 119.3,
       "max": 1992.5,
       "min": 0.1
     },
     "floor_area": {
-      "mean": 77093.93712815185,
-      "std": 140499.64715291111,
-      "median": 38688.5,
-      "p95": 254608.0,
+      "mean": 77244.54082831892,
+      "std": 140904.66248642682,
+      "median": 38701.5,
+      "p95": 256271.15000000046,
       "max": 3607789.0,
       "min": 1.0
     },
     "building_age": {
-      "mean": 49.75285673812447,
-      "std": 23.2681850633315,
+      "mean": 49.762457690861226,
+      "std": 23.27758622243317,
       "median": 48.0,
-      "p95": 98.0,
+      "p95": 97.45000000000073,
       "max": 149.0,
       "min": 0.0
     },
     "emissions": {
-      "mean": 208.75287306384587,
-      "std": 629.1726583368878,
-      "median": 77.12,
-      "p95": 724.9575,
+      "mean": 213.72834132581102,
+      "std": 732.298099042351,
+      "median": 77.125,
+      "p95": 729.3044999999998,
       "max": 35288.1,
       "min": 0.0
     },
     "station_distance_miles": {
-      "mean": 5.911468727373235,
-      "std": 3.5810081169203194,
-      "median": 5.291360633391906,
-      "p95": 13.593589863109829,
+      "mean": 5.913345372415389,
+      "std": 3.581153239773077,
+      "median": 5.293443994601015,
+      "p95": 13.59080137380687,
       "max": 17.056582699739778,
       "min": 0.0886930459776981
     }
   },
-  "site_eui_skewness": 9.338564543574417,
+  "site_eui_skewness": 9.449020119996199,
   "median_site_eui_by_year": {
     "2023": 35.1,
     "2024": 35.6,
@@ -65,177 +65,177 @@
   "top_property_types": [
     {
       "type": "Multifamily Housing",
-      "rows": 11237,
-      "share": 0.5305977901595996,
+      "rows": 11272,
+      "share": 0.5298984580669425,
       "median_site_eui": 36.4
     },
     {
       "type": "Office",
-      "rows": 2177,
-      "share": 0.10279535366890169,
-      "median_site_eui": 37.4
+      "rows": 2193,
+      "share": 0.10309326814591951,
+      "median_site_eui": 37.5
     },
     {
       "type": "Non-Refrigerated Warehouse",
-      "rows": 1243,
-      "share": 0.05869298328454056,
+      "rows": 1249,
+      "share": 0.05871568258743889,
       "median_site_eui": 10.0
     },
     {
       "type": "Manufacturing/Industrial Plant",
-      "rows": 1020,
-      "share": 0.048163188214184534,
-      "median_site_eui": 23.95
+      "rows": 1028,
+      "share": 0.048326438510718314,
+      "median_site_eui": 24.0
     },
     {
       "type": "Distribution Center",
-      "rows": 521,
-      "share": 0.024601001038813863,
+      "rows": 523,
+      "share": 0.02458631064309891,
       "median_site_eui": 10.0
     },
     {
       "type": "Retail Store",
-      "rows": 470,
-      "share": 0.022192841628104636,
-      "median_site_eui": 37.150000000000006
+      "rows": 471,
+      "share": 0.02214178262504701,
+      "median_site_eui": 37.1
     },
     {
       "type": "Self-Storage Facility",
       "rows": 428,
-      "share": 0.020209651525167627,
+      "share": 0.020120345994734862,
       "median_site_eui": 3.8
     },
     {
       "type": "Strip Mall",
       "rows": 330,
-      "share": 0.015582207951647936,
+      "share": 0.015513350883790899,
       "median_site_eui": 53.05
     },
     {
       "type": "Other",
       "rows": 323,
-      "share": 0.015251676267825101,
+      "share": 0.015184279804437758,
       "median_site_eui": 23.9
     },
     {
       "type": "Parking",
-      "rows": 315,
-      "share": 0.014873925772027575,
+      "rows": 316,
+      "share": 0.014855208725084619,
       "median_site_eui": 5.5
     }
   ],
   "rows_by_station": {
-    "USW00093134": 9417,
-    "USW00023152": 8521,
-    "USW00023174": 3240
+    "USW00093134": 9468,
+    "USW00023152": 8550,
+    "USW00023174": 3254
   },
   "weather_effect_bootstrap": {
     "random_forest": {
-      "mae_diff": -0.015578296052648022,
-      "ci95_low": -0.06970901589623824,
-      "ci95_high": 0.04724395299108728
+      "mae_diff": -0.06419436291103081,
+      "ci95_low": -0.12784087153720106,
+      "ci95_high": -0.0012883393846524426
     },
     "linear": {
-      "mae_diff": -0.003671726630709168,
-      "ci95_low": -0.02138229607146622,
-      "ci95_high": 0.014919549496467876
+      "mae_diff": -0.006072729480324187,
+      "ci95_low": -0.026950319213503677,
+      "ci95_high": 0.01358407539706259
     },
     "n_bootstrap": 1000
   },
   "occupancy_effect_bootstrap": {
     "random_forest": {
-      "mae_diff": -0.05958586168062297,
-      "ci95_low": -0.2418057848247674,
-      "ci95_high": 0.13491947344867966
+      "mae_diff": -0.020964478873644842,
+      "ci95_low": -0.20641437194555773,
+      "ci95_high": 0.18830112282841202
     },
     "linear": {
-      "mae_diff": -0.025119684980820366,
-      "ci95_low": -0.070740608580722,
-      "ci95_high": 0.02049649220571582
+      "mae_diff": -0.031725822793214946,
+      "ci95_low": -0.07311693367160625,
+      "ci95_high": 0.010520847107865909
     },
     "n_bootstrap": 1000
   },
   "residuals": {
-    "mean": -0.42355837762239384,
-    "median": -2.4075542526917406,
-    "share_positive": 0.4272358107470016
+    "mean": -1.0276573427028253,
+    "median": -2.483264119214141,
+    "share_positive": 0.423279428356525
   },
   "median_residual_by_type": {
-    "Multifamily Housing": -0.12411040533540074,
-    "Office": -4.892627709164458,
-    "Non-Refrigerated Warehouse": -5.663578725441214,
-    "Manufacturing/Industrial Plant": -27.705186836774345,
-    "Distribution Center": -7.127824476449483,
-    "Retail Store": -13.65106455165205,
-    "Self-Storage Facility": -1.6002295255670265,
-    "Strip Mall": -16.71768812853815
+    "Multifamily Housing": -0.19480891145891377,
+    "Office": -5.323511424686416,
+    "Non-Refrigerated Warehouse": -5.485315596440591,
+    "Manufacturing/Industrial Plant": -32.23914889971144,
+    "Distribution Center": -7.61653933381433,
+    "Retail Store": -14.149783044733027,
+    "Self-Storage Facility": -1.2839608780108767,
+    "Strip Mall": -19.000287935444184
   },
   "residual_persistence": {
-    "three_year_buildings": 5865,
+    "three_year_buildings": 5922,
     "pearson": {
       "2023": {
         "2023": 1.0,
-        "2024": 0.7718,
-        "2025": 0.8104
+        "2024": 0.785,
+        "2025": 0.8193
       },
       "2024": {
-        "2023": 0.7718,
+        "2023": 0.785,
         "2024": 1.0,
-        "2025": 0.8416
+        "2025": 0.8505
       },
       "2025": {
-        "2023": 0.8104,
-        "2024": 0.8416,
+        "2023": 0.8193,
+        "2024": 0.8505,
         "2025": 1.0
       }
     },
     "spearman": {
       "2023": {
         "2023": 1.0,
-        "2024": 0.8492,
+        "2024": 0.849,
         "2025": 0.7955
       },
       "2024": {
-        "2023": 0.8492,
+        "2023": 0.849,
         "2024": 1.0,
-        "2025": 0.8876
+        "2025": 0.888
       },
       "2025": {
         "2023": 0.7955,
-        "2024": 0.8876,
+        "2024": 0.888,
         "2025": 1.0
       }
     },
-    "share_same_sign_all_years": 0.8008525149190111
+    "share_same_sign_all_years": 0.7975346166835529
   },
   "positive_years_distribution": {
-    "0": 2714,
-    "1": 595,
-    "2": 573,
-    "3": 1983
+    "0": 2761,
+    "1": 594,
+    "2": 605,
+    "3": 1962
   },
   "ranking": {
-    "eligible": 2556,
-    "eligible_share_of_three_year": 0.4358056265984655,
-    "top_decile_size": 256,
-    "top100_excess_share": 0.555520074975962,
-    "top_decile_excess_share": 0.7331138606493307,
-    "eligible_negative_mean_excess": 141,
-    "flagged_total": 61,
-    "flagged_in_top_decile": 51,
-    "median_floor_area_top_decile": 102564.5,
-    "median_floor_area_eligible": 38487.0,
-    "multifamily_share_eligible": 0.6349765258215962,
-    "multifamily_share_modeled_rows": 0.5305977901595996,
+    "eligible": 2567,
+    "eligible_share_of_three_year": 0.43346842283012493,
+    "top_decile_size": 257,
+    "top100_excess_share": 0.5635369471885171,
+    "top_decile_excess_share": 0.7382073810981907,
+    "eligible_negative_mean_excess": 130,
+    "flagged_total": 60,
+    "flagged_in_top_decile": 48,
+    "median_floor_area_top_decile": 116695.0,
+    "median_floor_area_eligible": 38475.0,
+    "multifamily_share_eligible": 0.6373198285936892,
+    "multifamily_share_modeled_rows": 0.5298984580669425,
     "top10": [
       {
         "priority_rank": 1,
         "property_type": "Data Center",
-        "floor_area": 567270.0,
-        "mean_actual_site_eui": 530.3000000000001,
-        "mean_predicted_site_eui": 200.14271534206543,
-        "mean_annual_excess_kbtu": 187288322.86790657,
-        "actual_to_predicted_ratio": 2.649609300511689,
+        "floor_area": 471004.0,
+        "mean_actual_site_eui": 1176.1666666666667,
+        "mean_predicted_site_eui": 416.83805493426325,
+        "mean_annual_excess_kbtu": 357646813.44040895,
+        "actual_to_predicted_ratio": 2.8216393698798736,
         "check_data_first": false
       },
       {
@@ -243,9 +243,9 @@
         "property_type": "Transportation Terminal/Station",
         "floor_area": 501396.0,
         "mean_actual_site_eui": 392.1666666666667,
-        "mean_predicted_site_eui": 108.65224668880494,
-        "mean_annual_excess_kbtu": 142152996.11921996,
-        "actual_to_predicted_ratio": 3.609374666590064,
+        "mean_predicted_site_eui": 106.74111900167728,
+        "mean_annual_excess_kbtu": 143111227.89703503,
+        "actual_to_predicted_ratio": 3.673998083723521,
         "check_data_first": false
       },
       {
@@ -253,9 +253,9 @@
         "property_type": "Museum",
         "floor_area": 1215400.0,
         "mean_actual_site_eui": 164.96666666666667,
-        "mean_predicted_site_eui": 48.438857843391155,
-        "mean_annual_excess_kbtu": 141627898.84380907,
-        "actual_to_predicted_ratio": 3.40566797012482,
+        "mean_predicted_site_eui": 58.18188976424812,
+        "mean_annual_excess_kbtu": 129786217.8471995,
+        "actual_to_predicted_ratio": 2.8353610949233237,
         "check_data_first": false
       },
       {
@@ -263,9 +263,9 @@
         "property_type": "Refrigerated Warehouse",
         "floor_area": 129469.0,
         "mean_actual_site_eui": 909.0333333333332,
-        "mean_predicted_site_eui": 43.499516442199784,
-        "mean_annual_excess_kbtu": 112059797.73907816,
-        "actual_to_predicted_ratio": 20.89755031050095,
+        "mean_predicted_site_eui": 53.28735644170643,
+        "mean_annual_excess_kbtu": 110792575.88218205,
+        "actual_to_predicted_ratio": 17.05908106602676,
         "check_data_first": true
       },
       {
@@ -273,9 +273,9 @@
         "property_type": "Parking",
         "floor_area": 228318.0,
         "mean_actual_site_eui": 342.43333333333334,
-        "mean_predicted_site_eui": 10.267347533639205,
-        "mean_annual_excess_kbtu": 75839473.54581456,
-        "actual_to_predicted_ratio": 33.35168427984046,
+        "mean_predicted_site_eui": 31.315641519591537,
+        "mean_annual_excess_kbtu": 71033769.15952991,
+        "actual_to_predicted_ratio": 10.93489760122276,
         "check_data_first": true
       },
       {
@@ -283,203 +283,362 @@
         "property_type": "Manufacturing/Industrial Plant",
         "floor_area": 200003.0,
         "mean_actual_site_eui": 391.93333333333334,
-        "mean_predicted_site_eui": 44.90282484768318,
-        "mean_annual_excess_kbtu": 69407142.7886555,
-        "actual_to_predicted_ratio": 8.728478323197425,
+        "mean_predicted_site_eui": 75.9422033497367,
+        "mean_annual_excess_kbtu": 63199173.97010928,
+        "actual_to_predicted_ratio": 5.160942348859202,
         "check_data_first": true
       },
       {
         "priority_rank": 7,
-        "property_type": "Distribution Center",
-        "floor_area": 378000.0,
-        "mean_actual_site_eui": 180.8,
-        "mean_predicted_site_eui": 14.462114323204014,
-        "mean_annual_excess_kbtu": 62875720.78582888,
-        "actual_to_predicted_ratio": 12.501629841904371,
-        "check_data_first": true
-      },
-      {
-        "priority_rank": 8,
         "property_type": "Hospital (General Medical & Surgical)",
         "floor_area": 403997.0,
         "mean_actual_site_eui": 213.2,
-        "mean_predicted_site_eui": 86.19227814746979,
-        "mean_annual_excess_kbtu": 51310738.60525664,
-        "actual_to_predicted_ratio": 2.4735394467150256,
+        "mean_predicted_site_eui": 65.71373479637647,
+        "mean_annual_excess_kbtu": 59584008.683468305,
+        "actual_to_predicted_ratio": 3.2443750254133494,
+        "check_data_first": false
+      },
+      {
+        "priority_rank": 8,
+        "property_type": "Distribution Center",
+        "floor_area": 378000.0,
+        "mean_actual_site_eui": 180.8,
+        "mean_predicted_site_eui": 39.31437906075408,
+        "mean_annual_excess_kbtu": 53481564.71503496,
+        "actual_to_predicted_ratio": 4.59882629000963,
         "check_data_first": false
       },
       {
         "priority_rank": 9,
         "property_type": "Office",
-        "floor_area": 351009.0,
-        "mean_actual_site_eui": 182.9333333333333,
-        "mean_predicted_site_eui": 38.34077927442926,
-        "mean_annual_excess_kbtu": 50753287.80766186,
-        "actual_to_predicted_ratio": 4.771247136735628,
+        "floor_area": 1699782.0,
+        "mean_actual_site_eui": 66.56666666666666,
+        "mean_predicted_site_eui": 35.50886615514114,
+        "mean_annual_excess_kbtu": 52791490.26908187,
+        "actual_to_predicted_ratio": 1.8746491756687316,
         "check_data_first": false
       },
       {
         "priority_rank": 10,
         "property_type": "Office",
-        "floor_area": 1699782.0,
-        "mean_actual_site_eui": 66.56666666666666,
-        "mean_predicted_site_eui": 36.910933678050355,
-        "mean_annual_excess_kbtu": 50408281.13085621,
-        "actual_to_predicted_ratio": 1.8034403368737195,
+        "floor_area": 351009.0,
+        "mean_actual_site_eui": 182.9333333333333,
+        "mean_predicted_site_eui": 45.29990932215933,
+        "mean_annual_excess_kbtu": 48310570.52873818,
+        "actual_to_predicted_ratio": 4.038271512474042,
         "check_data_first": false
       }
     ]
   },
+  "peer_comparison": {
+    "compared_building_years": 18302,
+    "ranked_buildings": 2417,
+    "peer_neighbors_minimum": 8,
+    "positive_mean_excess_required": true,
+    "check_data_first": 94,
+    "top10": [
+      {
+        "peer_priority_rank": 1,
+        "property_type": "Refrigerated Warehouse",
+        "floor_area": 129469.0,
+        "mean_actual_site_eui": 909.0333333333332,
+        "mean_peer_median_site_eui": 55.46666666666667,
+        "mean_peer_excess_kbtu": 110510422.76666664,
+        "mean_actual_to_peer_median_ratio": 16.392250952328087,
+        "check_data_first": true
+      },
+      {
+        "peer_priority_rank": 2,
+        "property_type": "Parking",
+        "floor_area": 228318.0,
+        "mean_actual_site_eui": 342.43333333333334,
+        "mean_peer_median_site_eui": 4.666666666666667,
+        "mean_peer_excess_kbtu": 77118209.80000001,
+        "mean_actual_to_peer_median_ratio": 73.83069363041177,
+        "check_data_first": true
+      },
+      {
+        "peer_priority_rank": 3,
+        "property_type": "Distribution Center",
+        "floor_area": 378000.0,
+        "mean_actual_site_eui": 180.8,
+        "mean_peer_median_site_eui": 10.2,
+        "mean_peer_excess_kbtu": 64486800.0,
+        "mean_actual_to_peer_median_ratio": 17.83661321410191,
+        "check_data_first": true
+      },
+      {
+        "peer_priority_rank": 4,
+        "property_type": "Manufacturing/Industrial Plant",
+        "floor_area": 290136.0,
+        "mean_actual_site_eui": 237.16666666666663,
+        "mean_peer_median_site_eui": 24.399999999999995,
+        "mean_peer_excess_kbtu": 61731269.6,
+        "mean_actual_to_peer_median_ratio": 9.999943318596168,
+        "check_data_first": true
+      },
+      {
+        "peer_priority_rank": 5,
+        "property_type": "Office",
+        "floor_area": 1699782.0,
+        "mean_actual_site_eui": 66.56666666666666,
+        "mean_peer_median_site_eui": 32.333333333333336,
+        "mean_peer_excess_kbtu": 58189203.79999999,
+        "mean_actual_to_peer_median_ratio": 2.068913430615558,
+        "check_data_first": false
+      },
+      {
+        "peer_priority_rank": 6,
+        "property_type": "Manufacturing/Industrial Plant",
+        "floor_area": 200003.0,
+        "mean_actual_site_eui": 391.93333333333334,
+        "mean_peer_median_site_eui": 119.91666666666669,
+        "mean_peer_excess_kbtu": 54404149.38333333,
+        "mean_actual_to_peer_median_ratio": 3.282111756451107,
+        "check_data_first": false
+      },
+      {
+        "peer_priority_rank": 7,
+        "property_type": "Office",
+        "floor_area": 890000.0,
+        "mean_actual_site_eui": 100.66666666666669,
+        "mean_peer_median_site_eui": 39.56666666666667,
+        "mean_peer_excess_kbtu": 54379000.0,
+        "mean_actual_to_peer_median_ratio": 2.5474109996441014,
+        "check_data_first": false
+      },
+      {
+        "peer_priority_rank": 8,
+        "property_type": "Manufacturing/Industrial Plant",
+        "floor_area": 58824.0,
+        "mean_actual_site_eui": 883.3666666666667,
+        "mean_peer_median_site_eui": 7.333333333333333,
+        "mean_peer_excess_kbtu": 51531784.8,
+        "mean_actual_to_peer_median_ratio": 133.60289001122334,
+        "check_data_first": true
+      },
+      {
+        "peer_priority_rank": 9,
+        "property_type": "Parking",
+        "floor_area": 351386.0,
+        "mean_actual_site_eui": 144.70000000000002,
+        "mean_peer_median_site_eui": 4.1499999999999995,
+        "mean_peer_excess_kbtu": 49387302.3,
+        "mean_actual_to_peer_median_ratio": 34.899761676342,
+        "check_data_first": true
+      },
+      {
+        "peer_priority_rank": 10,
+        "property_type": "Office",
+        "floor_area": 380653.0,
+        "mean_actual_site_eui": 151.66666666666666,
+        "mean_peer_median_site_eui": 23.583333333333332,
+        "mean_peer_excess_kbtu": 48755305.083333336,
+        "mean_actual_to_peer_median_ratio": 7.18063253863274,
+        "check_data_first": true
+      }
+    ]
+  },
+  "peer_sensitivity": [
+    {
+      "row_type": "ranking",
+      "peer_neighbors": 8,
+      "candidate_buildings": 2417.0,
+      "top_decile_size": 242.0,
+      "comparison_peer_neighbors": NaN,
+      "top_decile_jaccard": NaN
+    },
+    {
+      "row_type": "ranking",
+      "peer_neighbors": 10,
+      "candidate_buildings": 2417.0,
+      "top_decile_size": 242.0,
+      "comparison_peer_neighbors": NaN,
+      "top_decile_jaccard": NaN
+    },
+    {
+      "row_type": "ranking",
+      "peer_neighbors": 15,
+      "candidate_buildings": 2420.0,
+      "top_decile_size": 242.0,
+      "comparison_peer_neighbors": NaN,
+      "top_decile_jaccard": NaN
+    },
+    {
+      "row_type": "top_decile_overlap",
+      "peer_neighbors": 8,
+      "candidate_buildings": NaN,
+      "top_decile_size": NaN,
+      "comparison_peer_neighbors": 10.0,
+      "top_decile_jaccard": 0.905511811023622
+    },
+    {
+      "row_type": "top_decile_overlap",
+      "peer_neighbors": 8,
+      "candidate_buildings": NaN,
+      "top_decile_size": NaN,
+      "comparison_peer_neighbors": 15.0,
+      "top_decile_jaccard": 0.8264150943396227
+    },
+    {
+      "row_type": "top_decile_overlap",
+      "peer_neighbors": 10,
+      "candidate_buildings": NaN,
+      "top_decile_size": NaN,
+      "comparison_peer_neighbors": 15.0,
+      "top_decile_jaccard": 0.8832684824902723
+    }
+  ],
   "model_metrics": [
     {
       "model": "property_type_median",
       "scope": "grouped_oof_all_buildings",
-      "MAE": 22.227431768816693,
-      "RMSE": 62.589025924570905,
-      "R2": 0.084641926428211
+      "MAE": 22.259916792027077,
+      "RMSE": 62.96999217904625,
+      "R2": 0.1091625159533986
     },
     {
       "model": "rf_weather_occ",
       "scope": "fixed_20pct_heldout_buildings",
-      "MAE": 23.776468531045097,
-      "RMSE": 52.736543559876694,
-      "R2": 0.0662044741010871
+      "MAE": 23.88077466408613,
+      "RMSE": 64.47473159982984,
+      "R2": 0.1304116203389409
+    },
+    {
+      "model": "linear_weather",
+      "scope": "fixed_20pct_heldout_buildings",
+      "MAE": 23.95488646768339,
+      "RMSE": 63.291331623120854,
+      "R2": 0.1620403472574696
+    },
+    {
+      "model": "linear_building",
+      "scope": "fixed_20pct_heldout_buildings",
+      "MAE": 23.977109369588977,
+      "RMSE": 63.27025230037092,
+      "R2": 0.1625984230654458
     },
     {
       "model": "rf_weather",
       "scope": "fixed_20pct_heldout_buildings",
-      "MAE": 23.894045910360855,
-      "RMSE": 51.25834599705403,
-      "R2": 0.1178191191025196
+      "MAE": 24.005795638887086,
+      "RMSE": 64.80632617529744,
+      "R2": 0.1214440053129455
     },
     {
       "model": "rf_building",
       "scope": "fixed_20pct_heldout_buildings",
-      "MAE": 23.894810373798528,
-      "RMSE": 51.294486747449106,
-      "R2": 0.116574681024446
+      "MAE": 24.039613371724087,
+      "RMSE": 64.84488824423514,
+      "R2": 0.1203981501188939
     },
     {
       "model": "linear_weather_occ",
       "scope": "fixed_20pct_heldout_buildings",
-      "MAE": 24.37450903427207,
-      "RMSE": 50.704556392523614,
-      "R2": 0.1367781202601424
-    },
-    {
-      "model": "linear_weather",
-      "scope": "fixed_20pct_heldout_buildings",
-      "MAE": 24.456678494873195,
-      "RMSE": 50.80842928174836,
-      "R2": 0.1332377207030175
-    },
-    {
-      "model": "linear_building",
-      "scope": "fixed_20pct_heldout_buildings",
-      "MAE": 24.46695679184274,
-      "RMSE": 50.82119590857674,
-      "R2": 0.1328020835083683
+      "MAE": 24.114044444316864,
+      "RMSE": 63.61611170732583,
+      "R2": 0.1534182855483712
     },
     {
       "model": "linear_weather_occ",
       "scope": "grouped_oof_all_buildings",
-      "MAE": 24.58914987541405,
-      "RMSE": 60.58148116693635,
-      "R2": 0.1424204708894277
+      "MAE": 24.62391154580557,
+      "RMSE": 61.332068669124055,
+      "R2": 0.1549032520759561
     },
     {
       "model": "linear_weather",
       "scope": "grouped_oof_all_buildings",
-      "MAE": 24.614269560394867,
-      "RMSE": 60.59077099821242,
-      "R2": 0.1421574406759858
+      "MAE": 24.655637368598786,
+      "RMSE": 61.35876419834647,
+      "R2": 0.1541674146831123
     },
     {
       "model": "linear_building",
       "scope": "grouped_oof_all_buildings",
-      "MAE": 24.617941287025577,
-      "RMSE": 60.58483898766988,
-      "R2": 0.1423254029554292
+      "MAE": 24.66171009807911,
+      "RMSE": 61.35391919546732,
+      "R2": 0.1543009864578827
     },
     {
       "model": "rf_weather_occ",
       "scope": "grouped_oof_all_buildings",
-      "MAE": 24.71431571167949,
-      "RMSE": 63.585709946455474,
-      "R2": 0.0552570051630938
+      "MAE": 24.89374326186953,
+      "RMSE": 64.80991140156975,
+      "R2": 0.0563432311013608
     },
     {
       "model": "rf_weather",
       "scope": "grouped_oof_all_buildings",
-      "MAE": 24.77390157336011,
-      "RMSE": 63.01964068573261,
-      "R2": 0.0720032047688473
+      "MAE": 24.91470774074318,
+      "RMSE": 64.14966807035361,
+      "R2": 0.0754720799522008
     },
     {
       "model": "rf_building",
       "scope": "grouped_oof_all_buildings",
-      "MAE": 24.789479869412755,
-      "RMSE": 62.97989623321042,
-      "R2": 0.0731733508945905
+      "MAE": 24.978902103654207,
+      "RMSE": 64.20556880232608,
+      "R2": 0.0738600901459795
     },
     {
       "model": "overall_median",
       "scope": "grouped_oof_all_buildings",
-      "MAE": 26.114770044385683,
-      "RMSE": 66.2586314339031,
-      "R2": -0.0258398216272444
+      "MAE": 26.27582737871381,
+      "RMSE": 67.56436844253587,
+      "R2": -0.0255731613186602
     }
   ],
   "ranking_stability": [
     {
       "model_a": "linear_building",
       "model_b": "linear_weather",
-      "top_decile_jaccard": 0.9912663755458516
+      "top_decile_jaccard": 0.9785407725321889
     },
     {
       "model_a": "linear_building",
       "model_b": "rf_building",
-      "top_decile_jaccard": 0.6724137931034483
+      "top_decile_jaccard": 0.6712328767123288
     },
     {
       "model_a": "linear_building",
       "model_b": "rf_weather",
-      "top_decile_jaccard": 0.6747404844290658
+      "top_decile_jaccard": 0.6885813148788927
     },
     {
       "model_a": "linear_building",
       "model_b": "linear_weather_occ",
-      "top_decile_jaccard": 0.978448275862069
+      "top_decile_jaccard": 0.9493670886075948
     },
     {
       "model_a": "linear_building",
       "model_b": "rf_weather_occ",
-      "top_decile_jaccard": 0.6829268292682927
+      "top_decile_jaccard": 0.6793103448275862
     },
     {
       "model_a": "linear_weather",
       "model_b": "rf_building",
-      "top_decile_jaccard": 0.6724137931034483
+      "top_decile_jaccard": 0.6621160409556314
     },
     {
       "model_a": "linear_weather",
       "model_b": "rf_weather",
-      "top_decile_jaccard": 0.6747404844290658
+      "top_decile_jaccard": 0.6793103448275862
     },
     {
       "model_a": "linear_weather",
       "model_b": "linear_weather_occ",
-      "top_decile_jaccard": 0.9699570815450644
+      "top_decile_jaccard": 0.9369747899159664
     },
     {
       "model_a": "linear_weather",
       "model_b": "rf_weather_occ",
-      "top_decile_jaccard": 0.6829268292682927
+      "top_decile_jaccard": 0.6701030927835051
     },
     {
       "model_a": "rf_building",
       "model_b": "rf_weather",
-      "top_decile_jaccard": 0.9655172413793104
+      "top_decile_jaccard": 0.9543726235741444
     },
     {
       "model_a": "rf_building",
@@ -489,164 +648,172 @@
     {
       "model_a": "rf_building",
       "model_b": "rf_weather_occ",
-      "top_decile_jaccard": 0.924812030075188
+      "top_decile_jaccard": 0.8929889298892989
     },
     {
       "model_a": "rf_weather",
       "model_b": "linear_weather_occ",
-      "top_decile_jaccard": 0.6735395189003437
+      "top_decile_jaccard": 0.6827586206896552
     },
     {
       "model_a": "rf_weather",
       "model_b": "rf_weather_occ",
-      "top_decile_jaccard": 0.9283018867924528
+      "top_decile_jaccard": 0.9
     },
     {
       "model_a": "linear_weather_occ",
       "model_b": "rf_weather_occ",
-      "top_decile_jaccard": 0.6816608996539792
+      "top_decile_jaccard": 0.6793103448275862
     }
   ],
   "cluster_selection": [
     {
       "k": 2,
-      "inertia": 127084.59937623932,
-      "silhouette": 0.2859587015235809
+      "inertia": 127713.8032898008,
+      "silhouette": 0.28376840411915
     },
     {
       "k": 3,
-      "inertia": 108359.01217114608,
-      "silhouette": 0.3004031544962021
+      "inertia": 108952.95732539054,
+      "silhouette": 0.3255391620791024
     },
     {
       "k": 4,
-      "inertia": 90051.41725916142,
-      "silhouette": 0.3334467720064519
+      "inertia": 91498.65741480717,
+      "silhouette": 0.336318326002094
     },
     {
       "k": 5,
-      "inertia": 80017.41000340911,
-      "silhouette": 0.3403983766993985
+      "inertia": 81632.1446409913,
+      "silhouette": 0.3170480172472804
     },
     {
       "k": 6,
-      "inertia": 70217.85542234681,
-      "silhouette": 0.3187444275392349
+      "inertia": 71863.99959843891,
+      "silhouette": 0.3141548399130079
     },
     {
       "k": 7,
-      "inertia": 63606.270171379314,
-      "silhouette": 0.3222735225847497
+      "inertia": 62740.37678353902,
+      "silhouette": 0.328032379188015
     },
     {
       "k": 8,
-      "inertia": 57916.30625360587,
-      "silhouette": 0.29050634383089
+      "inertia": 57003.679496461424,
+      "silhouette": 0.2991634679455687
     }
   ],
   "cluster_summary": [
     {
       "cluster": 0,
-      "rows": 9130,
-      "buildings": 3488,
-      "median_site_eui": 34.6,
-      "median_floor_area": 40151.0,
-      "mean_emissions": 162.63939745836984,
-      "mean_hot_days": 17.27393209200438
+      "rows": 3197,
+      "buildings": 1193,
+      "median_site_eui": 32.5,
+      "median_floor_area": 40840.0,
+      "mean_emissions": 178.71898967782295,
+      "mean_hot_days": 1.3412574288395371
     },
     {
       "cluster": 1,
-      "rows": 226,
-      "buildings": 93,
-      "median_site_eui": 50.2,
-      "median_floor_area": 856039.0,
-      "mean_emissions": 3717.97889380531,
-      "mean_hot_days": 18.67699115044248
+      "rows": 8462,
+      "buildings": 3199,
+      "median_site_eui": 36.0,
+      "median_floor_area": 35613.5,
+      "mean_emissions": 136.15042188607896,
+      "mean_hot_days": 46.06877806665091
     },
     {
       "cluster": 2,
-      "rows": 8387,
-      "buildings": 3184,
-      "median_site_eui": 35.9,
-      "median_floor_area": 35603.0,
-      "mean_emissions": 132.698097054966,
-      "mean_hot_days": 46.07356623345654
+      "rows": 9232,
+      "buildings": 3516,
+      "median_site_eui": 34.7,
+      "median_floor_area": 40144.0,
+      "mean_emissions": 164.41725352112675,
+      "mean_hot_days": 17.29354419410745
     },
     {
       "cluster": 3,
-      "rows": 3160,
-      "buildings": 1188,
-      "median_site_eui": 32.4,
-      "median_floor_area": 41067.0,
-      "mean_emissions": 176.0846075949367,
-      "mean_hot_days": 1.3408227848101266
-    },
-    {
-      "cluster": 4,
-      "rows": 275,
-      "buildings": 144,
-      "median_site_eui": 350.8,
-      "median_floor_area": 45000.0,
-      "mean_emissions": 1550.3596,
-      "mean_hot_days": 24.985454545454544
+      "rows": 381,
+      "buildings": 168,
+      "median_site_eui": 110.0,
+      "median_floor_area": 530000.0,
+      "mean_emissions": 3425.094724409449,
+      "mean_hot_days": 21.37795275590551
     }
   ],
   "data_quality_report": {
     "year_source_column": "program_year",
     "usable_rows_by_year": {
-      "2023": 7566,
-      "2024": 7354,
-      "2025": 6603
+      "2023": 7575,
+      "2024": 7373,
+      "2025": 6669
     },
-    "raw_rows": 96156,
-    "selected_year_rows_before_dedup": 33715,
+    "excluded_rows_by_year_and_compliance_status": {
+      "2023": {
+        "COMPLIED": 87,
+        "NOT COMPLIED": 3581
+      },
+      "2024": {
+        "COMPLIED": 80,
+        "NOT COMPLIED": 3777
+      },
+      "2025": {
+        "COMPLIED": 68,
+        "NOT COMPLIED": 4500
+      }
+    },
+    "raw_rows": 96151,
+    "selected_year_rows_before_dedup": 33710,
     "duplicate_rows_flagged": 0,
-    "rows_after_dedup": 33715,
-    "invalid_or_missing_floor_area": 11937,
-    "invalid_or_missing_site_eui": 12192,
-    "usable_rows": 21523,
-    "usable_unique_buildings": 8145,
-    "usable_buildings_all_three_years": 5967,
+    "rows_after_dedup": 33710,
+    "invalid_or_missing_floor_area": 11835,
+    "invalid_or_missing_site_eui": 12093,
+    "usable_rows": 21617,
+    "usable_unique_buildings": 8158,
+    "usable_buildings_all_three_years": 6024,
     "missing_by_column": {
       "building_id": 0,
       "address": 0,
       "year": 0,
-      "property_type": 11937,
+      "property_type": 11835,
       "postal_code": 0,
-      "year_built": 11937,
-      "floor_area": 11937,
-      "site_eui": 12142,
-      "emissions": 12129,
-      "occupancy": 11937,
-      "latitude": 33715,
-      "longitude": 33715,
+      "year_built": 11835,
+      "floor_area": 11835,
+      "site_eui": 12043,
+      "emissions": 12030,
+      "occupancy": 11835,
+      "number_of_buildings": 11835,
+      "latitude": 33710,
+      "longitude": 33710,
+      "exclusion_reason": 21617,
       "usable_target": 0
     }
   },
   "join_report": {
-    "building_year_rows": 21523,
-    "geocoded_rows": 21199,
-    "weather_joined_rows": 21199,
-    "median_station_distance_miles": 5.291112941074684
+    "building_year_rows": 21617,
+    "geocoded_rows": 21293,
+    "weather_joined_rows": 21293,
+    "median_station_distance_miles": 5.291608325709128,
+    "buildings_needing_data_review": 981
   },
   "geocoding_report": {
-    "latest_batch_submitted": 139,
-    "latest_batch_matched": 16,
-    "cumulative_matched": 8022,
-    "total_buildings": 8145,
-    "cumulative_match_rate": 0.9848987108655617
+    "latest_batch_submitted": 136,
+    "latest_batch_matched": 13,
+    "cumulative_matched": 8035,
+    "total_buildings": 8158,
+    "cumulative_match_rate": 0.9849227751899976
   },
   "spearman_with_site_eui": {
     "site_eui": 1.0,
-    "floor_area": -0.03083426007540957,
-    "building_age": 0.012467011131277688,
-    "latitude": 0.03233581159272029,
-    "longitude": -0.054294271578865204,
-    "mean_temp_f": 0.002134239140201364,
-    "total_prcp_mm": -0.0004115366024846914,
-    "hdd65": 0.01074219475805005,
-    "cdd65": 0.01978699381376337,
-    "hot_days_90f": 0.02529799802919386,
-    "emissions": 0.6906564520210303
+    "floor_area": -0.028979370490834804,
+    "building_age": 0.012584377984210452,
+    "latitude": 0.031113551375171012,
+    "longitude": -0.053621292191926045,
+    "mean_temp_f": 0.0012389510847304937,
+    "total_prcp_mm": -0.0009251461128717571,
+    "hdd65": 0.010614313335877484,
+    "cdd65": 0.018508205185185058,
+    "hot_days_90f": 0.024009265132440744,
+    "emissions": 0.6913696869195587
   }
 }

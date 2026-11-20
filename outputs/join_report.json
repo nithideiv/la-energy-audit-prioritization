@@ -1,6 +1,7 @@
 {
-  "building_year_rows": 21523,
-  "geocoded_rows": 21199,
-  "weather_joined_rows": 21199,
-  "median_station_distance_miles": 5.291112941074684
+  "building_year_rows": 21617,
+  "geocoded_rows": 21293,
+  "weather_joined_rows": 21293,
+  "median_station_distance_miles": 5.291608325709128,
+  "buildings_needing_data_review": 981
 }
