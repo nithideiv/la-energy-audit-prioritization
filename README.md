@@ -38,6 +38,10 @@ python scripts/07_model_and_rank.py      # slowest step: several minutes (random
 python scripts/08_cluster.py
 python scripts/10_peer_compare.py        # explicit like-for-like building comparisons
 python scripts/09_report_figures.py      # report figures + report_stats.json (seconds; trains nothing)
+python scripts/11_per_type_models.py     # per-type / grouped models + model portfolio (~13 min; --reuse reruns only the portfolio step)
+python scripts/12_feature_importance.py  # grouped permutation importance (~5 min)
+python scripts/13_portfolio_figures.py   # figs 6-11 + fairness_by_type.csv (seconds)
+python scripts/14_building_audit_cards.py [--building-id ID]   # per-building audit evidence cards
 ```
 
 The Census batch geocoder is deliberately a manual checkpoint so no addresses are sent without a team member reviewing the file. If the LA download already includes reliable latitude/longitude, Step 4 will use those and may not need a batch upload. Geocodes accumulate in `data/interim/geocodes.csv`, so after a fresh download only addresses not yet matched are prepared for upload.
@@ -96,6 +100,15 @@ Figures in `outputs/figures/`:
 ### Rerunning with new data
 
 Everything downstream of the download is recomputed from the data, so rerunning steps 1–9 updates all tables and figures. Step 9 computes its labels (counts, medians, flagged totals, best model) from the outputs, so the figures stay consistent with the data. The written report is not regenerated: after a rerun, take new numbers from `outputs/report_stats.json`. The LA portal is updated over time, so a later download can change counts slightly (an earlier download had 21,418 usable rows and the October 26, 2026 download had 21,523).
+
+### Per-type models, portfolio, feature importance, fairness (steps 11-14)
+
+- `grouping_comparison.csv`, `per_type_metrics.csv`, `per_type_oof_predictions.csv`: three ways of splitting the data (multifamily vs other, six use categories, one model per property type with at least 50 buildings plus a pooled bucket), each with ridge and random forest, each with a raw and log-target version, all scored on one shared grouped 5-fold split. Because 11 builds its own deterministic folds, its general-model numbers differ slightly from `model_metrics.csv`.
+- `model_portfolio.csv`, `portfolio_summary.json`: the model recommended per property type (simplest model whose building-level bootstrap MAE difference from the best includes zero). Selection and scoring use the same out-of-fold predictions, so the overall portfolio MAE is slightly optimistic.
+- `feature_importance_general.csv`, `feature_importance_by_type.csv`: permutation importance (increase in held-out MAE when a feature is shuffled).
+- `fairness_by_type.csv`: error, bias and audit-selection rates by property type.
+- `audit_priority_ranking_portfolio.csv`: the audit screen rerun with portfolio predictions.
+- Figures 6-11 and `figures/building_cards/`.
 
 ## 4. Methodological guardrails
 
