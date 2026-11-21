@@ -1,5 +1,11 @@
 # Final report outline
 
+Use `outputs/final_report/final_results_report.html` and `docs/final_results.md`
+as the authoritative updated results. They use the validation-selected,
+building-disjoint held-out experiment. Earlier OOF rankings and figures below
+are a separate legacy analysis and must be labeled accordingly. Step 13 builds
+the final report from verified matching step-11/12 outputs.
+
 ## 1. Introduction
 
 - Why audit prioritization matters under limited budgets

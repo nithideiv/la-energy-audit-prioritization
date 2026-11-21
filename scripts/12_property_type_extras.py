@@ -37,6 +37,8 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from project import load_config
+from audit_reporting import same_type_context, verify_analysis_files, file_sha256
+import json
 
 try:
     from property_models import LABELS
@@ -88,7 +90,10 @@ def wilson(k, n, z=1.96):
 def conformal_quantile(values, level=.9):
     values = np.asarray(values, float)
     n = len(values)
-    return float(np.quantile(values, min(1.0, np.ceil((n + 1) * level) / n)))
+    if n == 0:
+        raise ValueError("Calibration sample is empty")
+    rank = int(np.ceil((n + 1) * level))
+    return float(np.sort(values)[rank - 1]) if rank <= n else float("inf")
 
 
 def scaled_radius(cal, pred, floor=SCALE_FLOOR, level=.9):
@@ -130,6 +135,7 @@ def building_screen(df, pred_col, above_col, n_years):
 
 # ----------------------------------------------------------------------------- loading
 def load(cohort):
+    verify_analysis_files(OUT)
     held = pd.read_csv(OUT / "heldout_predictions.csv", dtype={"building_id": str})
     held = held[held["cohort"].eq(cohort)].reset_index(drop=True)
     types = pd.read_csv(OUT / "per_type_test_metrics.csv")
@@ -158,7 +164,8 @@ def recommendations(held, types):
 
     def advice(r):
         if r.limited_test_support:
-            return "General model (too few test buildings to say more)"
+            name = label(r.general_model) if r.selected_route == "general" else label(r.selected_route)
+            return f"Frozen validation route: {name}; insufficient test support for an individual claim"
         if r.selected_route == "general":
             return f"General model: {label(r.general_model)}"
         better = r.paired_diff_ci_high < 0
@@ -190,11 +197,11 @@ def recommendation_text(rec):
                           for r in spec.itertuples())
         parts.append(f"Use a specialist for: {items}.")
     else:
-        parts.append("No property type cleared the validation threshold for a specialist model.")
+        parts.append("No adequately evaluated property type has a validation-selected specialist route.")
     parts.append(f"Use the general model ({general_name}) for: " + (", ".join(short(t) for t in gen["property_type"]) or "none") + ".")
     n_small = int(rec["limited_test_support"].sum())
-    parts.append(f"The remaining {n_small} property types have too few test buildings to evaluate individually; "
-                 "they also use the general model, and their per-type errors are in the CSV but should not be interpreted.")
+    parts.append(f"The remaining {n_small} property types have too few test buildings for reliable individual conclusions; "
+                 "their frozen validation routes and descriptive errors remain in the CSV. Test support does not change the selected route.")
     return " ".join(parts)
 
 
@@ -442,6 +449,7 @@ def building_card(held, screen, building_id, q_text):
     if rows.empty:
         raise SystemExit(f"building_id {building_id} is not among the held-out buildings of the primary cohort")
     b = screen[screen["building_id"].eq(building_id)].iloc[0]
+    context = same_type_context(screen, building_id)
     n_rank = int(screen["qualifies"].sum())
     route = rows["selected_route"].iloc[0]
     model_name = label(rows["general_model"].iloc[0]) if route == "general" else label(route)
@@ -453,7 +461,7 @@ def building_card(held, screen, building_id, q_text):
     ax = axes[0]
     ax.bar(x - .18, rows["site_eui"], .35, color=ORANGE, label="Reported")
     ax.bar(x + .18, pred, .35, color=BLUE, label="Expected")
-    ax.errorbar(x + .18, pred, yerr=[pred - low, high - pred], fmt="none", color="#333", capsize=4)
+    ax.errorbar(x + .18, pred, yerr=[np.maximum(0, pred - low), np.maximum(0, high - pred)], fmt="none", color="#333", capsize=4)
     top = max(rows["site_eui"].max(), high.max())
     for xi, (s, hi) in enumerate(zip(rows["site_eui"], rows["above_band"])):
         ax.text(xi - .18, s + top * .015, f"{s:.0f}", ha="center", fontsize=9, fontweight="bold")
@@ -494,11 +502,12 @@ def building_card(held, screen, building_id, q_text):
             why.append("average use is at or below expected")
         lines = [f"Reason: {'; '.join(why)}.", f"Average: {b['mean_actual']:.0f} reported vs. {b['mean_expected']:.0f} expected kBtu/ft²."]
     t.text(0, .91, head, fontsize=13, fontweight="bold", color=col, va="top")
+    lines.append(f"Comparison context: {context['same_type_three_year_buildings']:,} three-year {b['property_type']} buildings in the held-out sample.")
     ypos = .81
     for ln in lines:
         wrapped = textwrap.fill(ln, 50)
         t.text(0, ypos, wrapped, fontsize=9.2, va="top")
-        ypos -= .062 * (wrapped.count("\n") + 1) + .035
+        ypos -= .052 * (wrapped.count("\n") + 1) + .022
     fig.suptitle(f"Building {building_id} · {b['property_type']}", y=1.02)
     note = (f"Expected use: {model_name} for this property type, fitted on other buildings only. Whiskers: {q_text}. "
             "A gap is a reason to look, not proof of waste: occupancy hours, process loads or reporting errors can explain it.")
@@ -545,7 +554,7 @@ def inject_into_report(rec, takeaway, cov, sel, card_ids, q, have_importance):
     parts = [MARKER,
              "<h2>Recommendation by property type</h2>", f"<p>{html.escape(takeaway)}</p>",
              table.to_html(index=False, float_format=lambda v: f"{v:.2f}", na_rep="Not fitted"), embed("08_recommendation_by_type"),
-             "<h2>Predicted versus actual</h2><p>Held-out building-years on a log scale; the diagonal is a perfect prediction. "
+             "<h2>Predicted versus actual</h2><p>Held-out building-years on linear axes limited to each panel's 99th percentile for readability; metrics use all records. The diagonal is a perfect prediction. "
              "Residuals are actual minus predicted EUI.</p>", embed("11_actual_vs_predicted_log"),
              "<h2>Fairness across property types</h2><p>Relative error and screening rates by type. Differences show uneven model performance "
              "and uneven audit flagging across building uses; they say nothing about demographic fairness. Rates carry 95% Wilson intervals "
@@ -590,7 +599,7 @@ def main():
     else:
         held = held.assign(band_low=held["interval_low"], band_high=held["interval_high"], above_band=held["above_interval"])
         radius = float((held["interval_high"] - held["pred_portfolio"]).median())
-        band_text = f"90% interval calibrated on separate buildings (±{radius:.0f} kBtu/ft², as in script 11)"
+        band_text = f"90% building-level prediction interval calibrated on separate buildings (radius ±{radius:.0f} kBtu/ft²)"
     shown = shown_types(types, held)
     print(f"{len(held):,} held-out rows, {held['building_id'].nunique():,} buildings; {len(shown)} types with enough test buildings")
 
@@ -621,6 +630,25 @@ def main():
         building_card(held, screen, bid, q_text)
     if not args.no_report:
         inject_into_report(rec, takeaway, cov, sel, ids, q, have_imp)
+    card_metadata = []
+    for bid in ids:
+        context = same_type_context(screen, bid)
+        card_metadata.append({"building_id": bid, **context, "cohort": args.cohort,
+                              "interval_method": args.interval,
+                              "interval_definition": band_text})
+    pd.DataFrame(card_metadata).to_csv(OUT / "building_card_metadata.csv", index=False)
+    artifacts = ["recommendations_by_type.csv", "interval_coverage_by_type.csv", "selection_fairness_by_type.csv",
+                 "heldout_screen.csv", "building_card_metadata.csv",
+                 "figures/08_recommendation_by_type.png", "figures/09_selection_fairness.png",
+                 "figures/10_interval_coverage_by_type.png", "figures/11_actual_vs_predicted_log.png"]
+    if have_imp:
+        artifacts.append("figures/12_importance_by_type.png")
+    artifacts += [f"figures/building_cards/{bid}_audit_card.png" for bid in ids]
+    (OUT / "extras_manifest.json").write_text(json.dumps({
+        "analysis_manifest_sha256": file_sha256(OUT / "run_manifest.json"),
+        "cohort": args.cohort, "interval_method": args.interval, "card_ids": ids,
+        "interval_definition": band_text,
+        "artifact_sha256": {name: file_sha256(OUT / name) for name in artifacts}}, indent=2))
     a = cov[cov["property_type"].eq("ALL")].iloc[0]
     print(f"Coverage overall: constant {a['constant_coverage']:.3f}, scaled {a['scaled_coverage']:.3f}; cards: {ids}")
 

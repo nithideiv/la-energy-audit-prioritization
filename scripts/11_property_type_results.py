@@ -22,6 +22,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from project import load_config
+from audit_reporting import file_sha256
 from property_models import (BLOCKS, LABELS, MODEL_NAMES, assign_splits, cluster_interval,
                              cohort_masks, conformal_radius, fit_model, predict, route_predict)
 
@@ -518,6 +519,18 @@ def main():
               "primary_cohort": "stable_single_building", "cohorts": summaries, "manager_example": example}
     (OUT / "analysis_summary.json").write_text(json.dumps(report, indent=2, default=lambda v: v.item() if hasattr(v, "item") else str(v)))
     write_report(summaries, aggregate, types, importance, example, cfg)
+    manifest = {
+        "analysis_version": "validation_selected_v2",
+        "primary_cohort": "stable_single_building", "evaluation": "fixed_heldout_buildings",
+        "input_sha256": file_sha256(ROOT / "data/processed/model_table.csv"),
+        "source_sha256": {str(p.relative_to(ROOT)): file_sha256(p) for p in [
+            Path(__file__), ROOT / "src/property_models.py", ROOT / "config.yml"]},
+        "artifact_sha256": {p.name: file_sha256(p) for p in sorted(OUT.glob("*.csv"))
+                            if p.name in {"heldout_predictions.csv", "per_type_test_metrics.csv", "test_metrics.csv",
+                                          "validation_model_selection.csv", "split_and_cohort_membership.csv", "feature_block_importance.csv"}
+                            or p.name.startswith("calibration_predictions_")},
+    }
+    (OUT / "run_manifest.json").write_text(json.dumps(manifest, indent=2))
     print(f"Saved illustrated report: {OUT / 'results_report.html'}", flush=True)
 
 

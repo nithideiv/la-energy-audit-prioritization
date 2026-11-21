@@ -230,7 +230,7 @@ def fig3(metrics):
             ax.text(ho.loc[m, "MAE"] + .3, yi - h / 2, f"{ho.loc[m, 'MAE']:.1f}", va="center", fontsize=8, color="#444")
     ax.set_yticks(y); ax.set_yticklabels([names[m] for m in order]); ax.set_xlim(0, oof["MAE"].max() * 1.15)
     ax.set_xlabel("Mean absolute error (kBtu/ft²)")
-    ax.set_title(f"Lowest MAE: {names[best]}", loc="left")
+    ax.set_title(f"Original candidate set · lowest OOF MAE: {names[best]}", loc="left")
     ax.legend(handles=[Patch(color=BLUE, label="Grouped 5-fold out-of-fold, all buildings"),
                        Patch(color=BLUE, alpha=.45, label="Fixed 20% held-out buildings")],
               loc="upper center", bbox_to_anchor=(.45, -.2), ncol=2, frameon=False, fontsize=8)

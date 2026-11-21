@@ -131,9 +131,9 @@
   },
   "weather_effect_bootstrap": {
     "random_forest": {
-      "mae_diff": -0.0641943629110307,
+      "mae_diff": -0.06419436291103069,
       "ci95_low": -0.12784087153720092,
-      "ci95_high": -0.0012883393846522702
+      "ci95_high": -0.0012883393846523123
     },
     "linear": {
       "mae_diff": -0.006072729480324187,
@@ -144,9 +144,9 @@
   },
   "occupancy_effect_bootstrap": {
     "random_forest": {
-      "mae_diff": -0.02096447887364498,
-      "ci95_low": -0.2064143719455578,
-      "ci95_high": 0.18830112282841197
+      "mae_diff": -0.020964478873645016,
+      "ci95_low": -0.2064143719455579,
+      "ci95_high": 0.1883011228284118
     },
     "linear": {
       "mae_diff": -0.031725822793214946,
@@ -156,16 +156,16 @@
     "n_bootstrap": 1000
   },
   "residuals": {
-    "mean": -1.0276573427028255,
-    "median": -2.483264119214141,
+    "mean": -1.0276573427028253,
+    "median": -2.4832641192141374,
     "share_positive": 0.423279428356525
   },
   "median_residual_by_type": {
     "Multifamily Housing": -0.19480891145891377,
     "Office": -5.323511424686416,
     "Non-Refrigerated Warehouse": -5.485315596440591,
-    "Manufacturing/Industrial Plant": -32.23914889971144,
-    "Distribution Center": -7.61653933381433,
+    "Manufacturing/Industrial Plant": -32.23914889971143,
+    "Distribution Center": -7.616539333814334,
     "Retail Store": -14.149783044733027,
     "Self-Storage Facility": -1.2839608780108767,
     "Strip Mall": -19.000287935444177
@@ -218,8 +218,8 @@
     "eligible": 2567,
     "eligible_share_of_three_year": 0.43346842283012493,
     "top_decile_size": 257,
-    "top100_excess_share": 0.5635369471885171,
-    "top_decile_excess_share": 0.7382073810981907,
+    "top100_excess_share": 0.5635369471885169,
+    "top_decile_excess_share": 0.7382073810981906,
     "eligible_negative_mean_excess": 130,
     "flagged_total": 60,
     "flagged_in_top_decile": 48,
@@ -253,9 +253,9 @@
         "property_type": "Museum",
         "floor_area": 1215400.0,
         "mean_actual_site_eui": 164.96666666666667,
-        "mean_predicted_site_eui": 58.181889764248126,
+        "mean_predicted_site_eui": 58.18188976424812,
         "mean_annual_excess_kbtu": 129786217.8471995,
-        "actual_to_predicted_ratio": 2.835361094923323,
+        "actual_to_predicted_ratio": 2.8353610949233237,
         "check_data_first": false
       },
       {
@@ -283,9 +283,9 @@
         "property_type": "Manufacturing/Industrial Plant",
         "floor_area": 200003.0,
         "mean_actual_site_eui": 391.93333333333334,
-        "mean_predicted_site_eui": 75.94220334973672,
+        "mean_predicted_site_eui": 75.9422033497367,
         "mean_annual_excess_kbtu": 63199173.97010928,
-        "actual_to_predicted_ratio": 5.1609423488592014,
+        "actual_to_predicted_ratio": 5.160942348859202,
         "check_data_first": true
       },
       {
@@ -294,7 +294,7 @@
         "floor_area": 403997.0,
         "mean_actual_site_eui": 213.2,
         "mean_predicted_site_eui": 65.71373479637647,
-        "mean_annual_excess_kbtu": 59584008.683468305,
+        "mean_annual_excess_kbtu": 59584008.68346829,
         "actual_to_predicted_ratio": 3.2443750254133494,
         "check_data_first": false
       },
@@ -501,8 +501,8 @@
       "model": "rf_weather_occ",
       "scope": "fixed_20pct_heldout_buildings",
       "MAE": 23.88077466408613,
-      "RMSE": 64.47473159982984,
-      "R2": 0.1304116203389409
+      "RMSE": 64.47473159982982,
+      "R2": 0.1304116203389411
     },
     {
       "model": "linear_weather",
@@ -699,7 +699,7 @@
     },
     {
       "k": 8,
-      "inertia": 57003.679496461424,
+      "inertia": 57003.67949646142,
       "silhouette": 0.2991634679455687
     }
   ],

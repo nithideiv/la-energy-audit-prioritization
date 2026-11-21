@@ -1,0 +1,15 @@
+{
+  "test_cases_executed_directly": 23,
+  "pytest_runner": "Not installed here; test functions executed directly, including both existing parametrized cases.",
+  "integration_checks": [
+    "All scripts 03,05,06,11,12,13 completed",
+    "One split per building",
+    "Only held-out records scored",
+    "Specialists chosen using validation support and MAE only",
+    "Exact property-type counts checked against screening records",
+    "All final-file checksums verified",
+    "Nine figures and five cards embedded and PNGs readable"
+  ],
+  "primary_test_buildings": 1385,
+  "primary_test_rows": 3680
+}
