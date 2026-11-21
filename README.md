@@ -1,6 +1,6 @@
 # LA Building Energy Audit Prioritization
 
-Project downloads 2023–2025 Los Angeles EBEWE records and NOAA GHCN-Daily observations, cleans and joins them, compares building-only and building-plus-weather regression models using building-grouped validation, and produces a cautious audit-priority ranking.
+Project downloads 2023–2025 Los Angeles EBEWE records and NOAA GHCN-Daily observations, cleans and joins them, compares building-only and building-plus-weather regression models using building-grouped validation, and produces a cautious audit-priority ranking. A second analysis (steps 11–12) asks whether per-property-type models beat one general model, recommends which model to use for which property type, and reports feature importance and fairness by property type.
 
 ## Research question
 
@@ -34,15 +34,25 @@ python scripts/04_geocode_buildings.py --prepare
 python scripts/04_geocode_buildings.py --parse data/raw/census_batch_result.csv
 python scripts/05_build_model_table.py
 python scripts/06_eda.py
-python scripts/07_model_and_rank.py      # slowest step: several minutes (random forests, 5-fold + held-out)
+python scripts/07_model_and_rank.py      # slowest of the first ten: several minutes (random forests, 5-fold + held-out)
 python scripts/08_cluster.py
 python scripts/10_peer_compare.py        # explicit like-for-like building comparisons
 python scripts/09_report_figures.py      # report figures + report_stats.json (seconds; trains nothing)
-python scripts/11_per_type_models.py     # per-type / grouped models + model portfolio (~13 min; --reuse reruns only the portfolio step)
-python scripts/12_feature_importance.py  # grouped permutation importance (~5 min)
-python scripts/13_portfolio_figures.py   # figs 6-11 + fairness_by_type.csv (seconds)
-python scripts/14_building_audit_cards.py [--building-id ID]   # per-building audit evidence cards
+python scripts/11_property_type_results.py   # per-type models, model portfolio, held-out test, importance, HTML report
+python scripts/12_property_type_extras.py    # recommendation table, fairness, interval coverage, building audit cards
+pytest -q tests
 ```
+
+Step 12 options:
+
+```bash
+python scripts/12_property_type_extras.py --cohort stable_single_building   # default; other cohorts: all_eligible, common_types
+python scripts/12_property_type_extras.py --building-id 10353               # card for a specific building (repeatable)
+python scripts/12_property_type_extras.py --interval scaled                 # type-scaled interval radius instead of constant
+python scripts/12_property_type_extras.py --no-report                       # do not insert the extras into the HTML report
+```
+
+Step 11 reads the `property_type_analysis` block of `config.yml` (forest size, minimum buildings for a specialist model, minimum validation gain, and so on). Step 12 reads only what step 11 wrote, so rerun 11 first if 12 reports a missing file.
 
 The Census batch geocoder is deliberately a manual checkpoint so no addresses are sent without a team member reviewing the file. If the LA download already includes reliable latitude/longitude, Step 4 will use those and may not need a batch upload. Geocodes accumulate in `data/interim/geocodes.csv`, so after a fresh download only addresses not yet matched are prepared for upload.
 
@@ -60,6 +70,8 @@ The Census batch geocoder is deliberately a manual checkpoint so no addresses ar
 | 8 | `08_cluster.py` | model table | cluster tables |
 | 9 | `10_peer_compare.py` | model table | annual peer comparisons and peer-based audit ranking |
 | 10 | `09_report_figures.py` | outputs of steps 3–8 plus peer ranking | report figures, `outputs/report_stats.json` |
+| 11 | `11_property_type_results.py` | model table (needs `number_of_buildings` and `needs_data_review` from step 5), `config.yml` | `outputs/property_type_results/`: held-out predictions, per-type test metrics, calibration predictions, feature-block importance, HTML report |
+| 12 | `12_property_type_extras.py` | outputs of step 11 | recommendation table, interval coverage, selection fairness, held-out audit screen, figures 08–12, building audit cards |
 
 ## 3. Outputs
 
@@ -97,32 +109,59 @@ Figures in `outputs/figures/`:
 - `site_eui_by_year.png`, `site_eui_by_property_type.png`, `cdd_vs_site_eui.png`: exploratory plots (step 6)
 - `report_fig1_eui_distribution.png`, `report_fig2_correlations.png`, `report_fig3_model_mae.png`, `report_fig4_residual_persistence.png`, `report_fig5_ranking.png`: report figures (step 9)
 
+### Per-property-type analysis (steps 11–12), in `outputs/property_type_results/`
+
+Question: does fitting models for subsets of building types predict better than one general model, and which model should be used for which property type?
+
+**Design.** Buildings are split into train / validation / calibration / test (50 / 20 / 10 / 20 %), with all years of a building in the same split. Models are frozen after the validation step, and the test set never influences which model is chosen for a type. The analysis is repeated on three cohorts (different ways to filter the data):
+
+- `all_eligible`: every building that passes the basic modeling filters
+- `common_types`: only property types with at least 100 training buildings
+- `stable_single_building` (primary): one-building reporting boundary, floor area at least 1,000 ft², and no `needs_data_review` flag
+
+**Candidate models.** Property-type median, ridge, random forest, and absolute-error gradient boosting. The best general model is selected on validation data.
+
+**Thin buckets.** A property type is routed to its own specialist model only if it has at least 60 training and 20 validation buildings and the specialist improves validation MAE by at least 5% over the selected general model. Otherwise the type uses the general model. Types below `min_report_test_buildings` (20) test buildings are not reported separately.
+
+**Intervals.** 90% split-conformal intervals from the calibration buildings (the largest absolute annual error per building), with a constant radius by default or a type-scaled radius with `--interval scaled`. Coverage varies by type, which is reported in `interval_coverage_by_type.csv` rather than hidden.
+
+**Main files** (step 11):
+
+- `heldout_predictions.csv`: general and portfolio prediction for every test building-year
+- `per_type_test_metrics.csv`: per-type error for the general model, the portfolio, and the type median
+- `calibration_predictions_<cohort>.csv`: calibration-split predictions used by step 12 for intervals
+- `feature_block_importance.csv`: permutation importance by feature block and, for step 12, single columns and within-type scopes
+- the HTML results report
+
+**Main files** (step 12):
+
+- `recommendations_by_type.csv`, `recommendations.md`: for each property type, which model to use and why (the takeaway table)
+- `interval_coverage_by_type.csv`: observed coverage of the 90% interval by type
+- `selection_fairness_by_type.csv`: error and audit-selection rate by property type
+- `heldout_screen.csv`: audit screen applied to held-out buildings only
+- Figures: 08 recommendation by type, 09 fairness by type, 10 interval coverage, 11 actual vs. predicted, 12 feature importance
+- `figures/building_cards/<building_id>_audit_card.png`: the view for an individual building manager (reported vs. expected energy per year, typical error band, and why the building does or does not meet the audit screen)
+
+Limitations to state when reporting these results: the analysis uses one split, so a specialist route that wins by a small margin is provisional; the common-types cohort depends on which buildings land in training; the audit ranking from step 12 covers held-out buildings only; interval coverage is uneven across property types.
+
 ### Rerunning with new data
 
-Everything downstream of the download is recomputed from the data, so rerunning steps 1–9 updates all tables and figures. Step 9 computes its labels (counts, medians, flagged totals, best model) from the outputs, so the figures stay consistent with the data. The written report is not regenerated: after a rerun, take new numbers from `outputs/report_stats.json`. The LA portal is updated over time, so a later download can change counts slightly (an earlier download had 21,418 usable rows and the October 26, 2026 download had 21,523).
-
-### Per-type models, portfolio, feature importance, fairness (steps 11-14)
-
-- `grouping_comparison.csv`, `per_type_metrics.csv`, `per_type_oof_predictions.csv`: three ways of splitting the data (multifamily vs other, six use categories, one model per property type with at least 50 buildings plus a pooled bucket), each with ridge and random forest, each with a raw and log-target version, all scored on one shared grouped 5-fold split. Because 11 builds its own deterministic folds, its general-model numbers differ slightly from `model_metrics.csv`.
-- `model_portfolio.csv`, `portfolio_summary.json`: the model recommended per property type (simplest model whose building-level bootstrap MAE difference from the best includes zero). Selection and scoring use the same out-of-fold predictions, so the overall portfolio MAE is slightly optimistic.
-- `feature_importance_general.csv`, `feature_importance_by_type.csv`: permutation importance (increase in held-out MAE when a feature is shuffled).
-- `fairness_by_type.csv`: error, bias and audit-selection rates by property type.
-- `audit_priority_ranking_portfolio.csv`: the audit screen rerun with portfolio predictions.
-- Figures 6-11 and `figures/building_cards/`.
+Everything downstream of the download is recomputed from the data, so rerunning steps 1–12 updates all tables and figures. Step 9 computes its labels (counts, medians, flagged totals, best model) from the outputs, so the figures stay consistent with the data. The written report is not regenerated: after a rerun, take new numbers from `outputs/report_stats.json` and `outputs/property_type_results/`. The LA portal is updated over time, so a later download can change counts slightly (an earlier download had 21,418 usable rows and the October 26, 2026 download had 21,523).
 
 ## 4. Methodological guardrails
 
-- All rows from one building stay in the same fold.
+- All rows from one building stay in the same fold or split.
 - Imputation, one-hot encoding, scaling, and model fitting occur inside each training fold.
 - Energy-derived variables (ENERGY STAR score, weather-normalized EUI, emissions, total energy) are not predictors.
 - Rows with Site EUI above `site_eui_model_max` are set aside for review instead of being modeled.
 - Buildings are ranked only if they have usable records in all three years and positive residuals in at least two years.
-- `excess_kbtu = (actual Site EUI − out-of-fold predicted Site EUI) × floor area`.
+- `excess_kbtu = (actual Site EUI − predicted Site EUI) × floor area`.
 - Negative residuals are retained in annual predictions; they are not silently set to zero.
 - Rankings include model-choice sensitivity and top-decile overlap, not just one final ordered list.
 - Treat `check_data_first` buildings as records to verify before treating them as audit candidates.
 - The peer ranking excludes records with changing reported core characteristics, multiple-building reporting boundaries, or floor area below 1,000 ft². It ranks only buildings above their peer median in at least two years and on average.
 - Occupancy (`OCCUPANCY` in the raw file, a self-reported 0-100 percent) is tested only in the `*_occ` models, which are scored on the same folds and seed as their non-occupancy counterparts. It is blank only for buildings that never filed energy data, so it is missing in 0% of modeled rows. Values outside 0-100 are treated as missing. The ranking still uses `rf_weather`.
+- In steps 11–12, the test split never alters which model is routed to a property type, and a property type is never fit on its own below the training and validation thresholds in `config.yml`.
 
 ## 5. Interpreting the results
 
@@ -134,7 +173,15 @@ Compare models on the grouped out-of-fold rows of `model_metrics.csv` (the held-
 
 - Adding occupancy (`linear_weather_occ`, `rf_weather_occ`) lowered grouped out-of-fold MAE by 0.03 (linear) and 0.06 (random forest) kBtu/ft², and the bootstrap intervals in `occupancy_effect_bootstrap` include zero, so the gain is not distinguishable from noise. Random forest RMSE and R² were slightly worse with it. Occupancy is 95-100% for most buildings, so it carries little signal; the exception is the few buildings below 50% occupied, which have much lower EUI.
 
-These numbers will shift if the data change; see `report_stats.json` for the current values.
+Per-property-type results (steps 11–12, stable single-building cohort, test split, October 2026 run). These come from a different split than `model_metrics.csv`, so the MAE values are not comparable with the 22.2 / 24.6 / 24.8 above:
+
+- The selected general model is absolute-error gradient boosting with test MAE 19.42 kBtu/ft². The portfolio (general model plus routed types) has test MAE 19.39, a difference of −0.03 with a 95% interval of [−0.07, 0.01], so the portfolio is not distinguishable from the general model overall.
+- Both are better than the property-type median baseline (20.53); the general-minus-baseline interval is [−1.63, −0.61].
+- Only Distribution Center and Self-Storage were routed away from the general model (to the property-type median). Every other type uses the general model. That is the takeaway: for most property types one general model is enough, and for those two the simple median is as good or better.
+- Property type dominates feature importance; annual weather adds about 1.5% of the model's MAE when the weather block is shuffled.
+- 90% interval coverage on test buildings is about 91% overall but uneven across property types.
+
+These numbers will shift if the data change; see `report_stats.json` and `outputs/property_type_results/` for the current values.
 
 ## 6. Tests
 
@@ -142,6 +189,7 @@ These numbers will shift if the data change; see `report_stats.json` for the cur
 pytest -q tests
 ```
 
+This includes `tests/test_property_extras.py`, which checks the Wilson interval, the type-scaled conformal radius, and the audit-screen rule and ranking used in step 12.
 
 ## 7. Data sources
 

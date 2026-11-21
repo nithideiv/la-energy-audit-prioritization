@@ -22,3 +22,11 @@ peer_neighbors: 10
 peer_min_neighbors: 8
 peer_neighbors_sensitivity: [8, 10, 15]
 
+# Property-type analysis settings used by script 11.
+property_type_analysis:
+  common_type_min_train_buildings: 100
+  min_specialist_train_buildings: 60
+  min_specialist_validation_buildings: 20
+  min_report_test_buildings: 20
+  min_validation_gain_fraction: 0.05
+  forest_trees: 200
